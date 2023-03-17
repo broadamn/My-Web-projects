@@ -107,8 +107,12 @@ h2#first_h2+p {
 }
 
 @media (max-width: 600px) {
-  div.step div {
+  .step * {
     display: inline-block;
     margin-right: 0;
   }
+}
+
+#back_to_top {
+  text-align: center;
 }
