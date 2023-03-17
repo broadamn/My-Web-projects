@@ -68,3 +68,59 @@ h2#first_h2 + p {
   text-align: justify;
   font-size: 16px;
 }
+
+.step#first {
+  width: 200px;
+  height: 50px;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.step#second {
+  width: 400px;
+  height: 50px;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.step#third {
+  width: 600px;
+  height: 50px;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .step#first {
+    display: inline-block;
+    width: auto;
+    margin-right: 0;
+  }
+
+  .step#second {
+    display: inline-block;
+    width: auto;
+    margin-right: 0;
+  }
+
+  .step#third {
+    display: inline-block;
+    width: auto;
+    margin-right: 0;
+  }
+}
