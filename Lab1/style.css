@@ -61,3 +61,10 @@ h4 {
   text-align: center; 
   padding: 5px; 
 }
+
+h2#first_h2 + p {
+  color: rgb(0, 0, 0);
+  font-family: 'Times New Roman', Times, serif; 
+  text-align: justify;
+  font-size: 16px;
+}
