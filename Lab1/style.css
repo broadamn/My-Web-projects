@@ -1,50 +1,51 @@
 body {
-    background-image: url("background.jpg");
-    background-repeat: repeat-x;
-    background-size: cover;
-  }
-  
-p, em {
-  color: #0e0e0e; 
-  font-family: Arial, sans-serif; 
-  font-size: 14px; 
+  background-image: url("background.jpg");
+  background-repeat: repeat-x;
+  background-size: cover;
 }
-  
+
+p,
+em {
+  color: #0e0e0e;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
 h1 {
-  color: #0f1e20; 
-  font-family: 'Times New Roman', Times, serif; 
-  font-size: 25px; 
+  color: #0f1e20;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 25px;
   text-align: center;
 }
 
 h2 {
-  color: #0f1e20; 
-  font-family: 'Times New Roman', Times, serif; 
+  color: #0f1e20;
+  font-family: 'Times New Roman', Times, serif;
   text-align: left;
   margin-left: 10px;
 }
 
 h3 {
-  color: #0f1e20; 
-  font-family: 'Times New Roman', Times, serif; 
+  color: #0f1e20;
+  font-family: 'Times New Roman', Times, serif;
   text-align: left;
   margin-left: 20px;
 }
 
 h4 {
-  color: #0f1e20; 
-  font-family: 'Times New Roman', Times, serif; 
-  font-size: 17px; 
+  color: #0f1e20;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 17px;
   text-align: left;
   margin-left: 30px;
 }
 
-#kep1{
+#kep1 {
   display: block;
   margin: 0 auto;
 }
 
-#battery_pic{
+#battery_pic {
   width: 300px;
 }
 
@@ -57,20 +58,20 @@ h4 {
 }
 
 #keretes-div {
-  border: 2px dashed rgb(252, 252, 252); 
-  text-align: center; 
-  padding: 5px; 
+  border: 2px dashed rgb(252, 252, 252);
+  text-align: center;
+  padding: 5px;
 }
 
-h2#first_h2 + p {
+h2#first_h2+p {
   color: rgb(0, 0, 0);
-  font-family: 'Times New Roman', Times, serif; 
+  font-family: 'Times New Roman', Times, serif;
   text-align: justify;
   font-size: 16px;
 }
 
-.step#first {
-  width: 200px;
+.step div:nth-child(1) {
+  width: 20%;
   height: 50px;
   background-color: blue;
   color: white;
@@ -81,8 +82,8 @@ h2#first_h2 + p {
   margin-bottom: 10px;
 }
 
-.step#second {
-  width: 400px;
+.step div:nth-child(2) {
+  width: 30%;
   height: 50px;
   background-color: blue;
   color: white;
@@ -93,8 +94,8 @@ h2#first_h2 + p {
   margin-bottom: 10px;
 }
 
-.step#third {
-  width: 600px;
+.step div:nth-child(3) {
+  width: 40%;
   height: 50px;
   background-color: blue;
   color: white;
@@ -106,21 +107,8 @@ h2#first_h2 + p {
 }
 
 @media (max-width: 600px) {
-  .step#first {
+  div.step div {
     display: inline-block;
-    width: auto;
-    margin-right: 0;
-  }
-
-  .step#second {
-    display: inline-block;
-    width: auto;
-    margin-right: 0;
-  }
-
-  .step#third {
-    display: inline-block;
-    width: auto;
     margin-right: 0;
   }
 }
