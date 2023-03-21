@@ -11,25 +11,28 @@ em {
   font-size: 14px;
 }
 
-h1 {
+.focim1 {
   color: #0f1e20;
   font-family: 'Times New Roman', Times, serif;
   font-size: 25px;
   text-align: center;
 }
 
-h2 {
-  color: #0f1e20;
-  font-family: 'Times New Roman', Times, serif;
-  text-align: left;
-  margin-left: 10px;
+.focim2 {
+  color: #0f484f;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  text-align: center;
 }
 
-h3 {
+.h2_3 {
   color: #0f1e20;
   font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 20px;
   text-align: left;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 h4 {
@@ -67,7 +70,7 @@ h2#first_h2+p {
   color: rgb(0, 0, 0);
   font-family: 'Times New Roman', Times, serif;
   text-align: justify;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .step div:nth-child(1) {
@@ -115,4 +118,46 @@ h2#first_h2+p {
 
 #back_to_top {
   text-align: center;
+}
+
+.link1_style {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+.link1_style:hover {
+  color: red;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.link1_style:active {
+  color: green;
+  font-weight: bold;
+}
+
+.link1_style:visited {
+  color: rgb(18, 76, 33);
+}
+
+.link2_style {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-style: italic;
+}
+
+.link2_style:hover {
+  color: red;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.link2_style:active {
+  color: green;
+  font-weight: bold;
+}
+
+.link2_style:visited {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
 }
