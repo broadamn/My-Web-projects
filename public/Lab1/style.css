@@ -52,11 +52,11 @@ h4 {
   width: 300px;
 }
 
-#battery_text .left {
+#battery_text td:nth-child(1) {
   text-align: left;
 }
 
-#battery_text td {
+#battery_text td:nth-child(n+2) {
   text-align: center;
 }
 
