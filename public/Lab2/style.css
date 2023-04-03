@@ -1,7 +1,42 @@
 body {
     background-image: url("background.jpg");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.picdiv {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.kartya {
+    margin: 20px;
+    border-radius: 4px;
+    width: 250px;
+    height: auto;
+}
+
+.kartya:hover {
+    box-shadow: 0px 0px 3px 5px #f2e1f2;
+    transform: scale(1.01);
+}
+
+#focim {
+    text-align: center;
+    font-size: 60px;
+    color: rgba(205, 1, 1, 0.778);
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 2px #5f0000;
 }
 
 .form1 {
@@ -13,14 +48,35 @@ body {
     font-size: 20px;
     padding: 20px;
     border: 3px solid #673131;
+    border-radius: 5px;
 }
 
 input[type="text"] {
+    background-color: rgba(255, 255, 255, 0.732);
     padding: 5px;
     margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid #5b5b5b;
-    width: 70%;
+    width: 65%;
+}
+
+input[type="submit"] {
+    background-color: rgba(255, 255, 255, 0.733);
+    border-radius: 5px;
+    border: 1px solid #909090;
+    width: 30%;
+    height: 25px;
+    color: black;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border 0.1s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: rgba(192, 0, 0, 0.57);
+    border-radius: 5px;
+    border: 1px solid #500000;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
 }
 
 select {
@@ -28,5 +84,11 @@ select {
     margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid #5b5b5b;
-    width: 30%;
+    width: 15%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
 }
