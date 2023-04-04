@@ -5,27 +5,56 @@ function flipCard(event) {
   else clickedImage.src = 'back.png';
 }
 
-function addScoreBoard() {
-  const newDiv = document.createElement('div');
+function addScoreBoard(cr, nickname, currency) {
+  const scoreboard = document.createElement('div');
 
-  newDiv.textContent = 'Your score:';
-  newDiv.setAttribute('id', 'scoreboard');
-
-  newDiv.style.margin = '20px';
-  newDiv.style.alignSelf = 'center';
+  scoreboard.id = 'scoreboard';
+  scoreboard.textContent = `${nickname}'s credit: ${cr} ${currency}`;
 
   const container = document.getElementById('container');
-  container.appendChild(newDiv);
+  container.appendChild(scoreboard);
 }
 
 function addPictureDiv() {
   const newDiv = document.createElement('picdiv');
   newDiv.id = 'picdiv';
-
-  const container = document.getElementById('container');
-  container.appendChild(newDiv);
-
+  newDiv.style.transition = 'opacity 0.5s ease-in-out';
   return newDiv;
+}
+
+function goBack() {
+  const form = document.getElementById('form1');
+  const focim = document.getElementById('focim');
+  const meguntB = document.getElementById('meguntB');
+  const picdiv = document.getElementById('picdiv');
+  const scoreboard = document.getElementById('scoreboard');
+
+  picdiv.style.opacity = '0';
+  meguntB.style.opacity = '0';
+  scoreboard.style.opacity = '0';
+
+  setTimeout(() => {
+    scoreboard.remove();
+    picdiv.remove();
+    meguntB.remove();
+    focim.style.fontSize = '60px';
+    focim.style.color = 'rgba(205, 1, 1, 0.778)';
+    focim.style.textShadow = '2px 2px 2px #5f0000';
+    form.style.display = 'block';
+  }, 500);
+
+  document.body.style.backgroundImage = 'url(background.jpg)';
+}
+
+function addMeguntam() {
+  const button = document.createElement('button');
+  button.id = 'meguntB';
+  button.textContent = 'Meguntam';
+
+  button.addEventListener('click', () => {
+    goBack();
+  });
+  return button;
 }
 
 function StartGame(event) {
@@ -33,22 +62,24 @@ function StartGame(event) {
   const form = document.getElementById('form1');
   const focim = document.getElementById('focim');
   form.style.display = 'none';
+
   const container = document.getElementById('container');
 
-  container.className = 'container';
+  const cr = document.getElementById('penz').value;
+  const nickname = document.getElementById('becenev').value;
+  const currency = document.getElementById('currency').value;
 
-  addScoreBoard();
+  addScoreBoard(cr, nickname, currency);
 
-  focim.style.fontSize = '45px';
+  focim.style.fontSize = '50px';
   focim.style.color = 'rgba(255, 255, 255, 0.888)';
   focim.style.textShadow = '2px 2px 2px #1d1b1b';
   focim.style.transition = 'font-size 0.5s ease-in-out, color 0.5s ease-in-out';
 
   document.body.style.backgroundImage = 'url(background2.jpg)';
-  document.body.style.transition = 'background-image 0.5s ease-in-out';
-  document.body.style.backgroundSize = 'cover';
 
   const picdiv = addPictureDiv();
+  container.appendChild(picdiv);
 
   const n = 3;
   for (let i = 0; i < n; i++) {
@@ -58,6 +89,9 @@ function StartGame(event) {
     image.addEventListener('click', flipCard);
     picdiv.appendChild(image);
   }
+
+  const meguntB = addMeguntam();
+  container.appendChild(meguntB);
 }
 
 const submit = document.getElementById('submit');
