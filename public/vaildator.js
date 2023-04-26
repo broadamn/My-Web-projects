@@ -5,6 +5,7 @@ const time = document.getElementById('time');
 const submitButton = document.getElementById('submit');
 const minp = document.getElementById('min-price');
 const maxp = document.getElementById('max-price');
+const id = document.getElementById('id');
 
 function validateSubmit(event) {
   const obj = event.target;
@@ -34,7 +35,7 @@ function validateTime(event) {
   }
 }
 
-function validatePrice(event) {
+function validateNum(event) {
   const obj = event.target;
 
   if (obj.value === '') {
@@ -55,20 +56,26 @@ function validatePrice(event) {
   }
 }
 
-from.addEventListener('input', validateSubmit);
-to.addEventListener('input', validateSubmit);
+if (from != null && to != null) {
+  from.addEventListener('input', validateSubmit);
+  to.addEventListener('input', validateSubmit);
+}
 
 if (time != null) {
   time.addEventListener('input', validateTime);
 }
 
 if (priceInput != null) {
-  priceInput.addEventListener('input', validatePrice);
+  priceInput.addEventListener('input', validateNum);
 }
 
 if (minp != null) {
-  minp.addEventListener('input', validatePrice);
+  minp.addEventListener('input', validateNum);
 }
 if (maxp != null) {
-  maxp.addEventListener('input', validatePrice);
+  maxp.addEventListener('input', validateNum);
+}
+
+if (id != null) {
+  id.addEventListener('input', validateNum);
 }

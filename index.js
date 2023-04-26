@@ -42,7 +42,6 @@ function validatePrice(price) {
 }
 
 function validateTrain(from, to, day, time, price, type) {
-  console.log(`${from} ${to} ${day} ${time} ${price} ${type}`);
   if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
     invalidmsg = 'Empty input field!';
     console.log(invalidmsg);
