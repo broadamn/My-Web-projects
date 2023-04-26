@@ -11,27 +11,56 @@ app.use(express.static(staticdir));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-function validateTrain(from, to, day, time, price, type) {
-  console.log(`${from} ${to} ${day} ${time} ${price} ${type}`);
-  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
-    console.log('Empty input field!');
+let invalidmsg;
+
+function validateTime(time) {
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  if (!timeRegex.test(time)) {
+    invalidmsg = 'Bad time format!';
+    console.log(invalidmsg);
     return false;
   }
-  if (type !== 'ir' && type !== 'r') {
-    console.log('bad type');
-    return false;
-  }
-  const days = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
-  if (!days.includes(day.toLowerCase())) {
-    console.log('bad day');
+  return true;
+}
+
+function validatePrice(price) {
+  const numregex = /^\d+$/;
+
+  if (!numregex.test(price)) {
+    invalidmsg = 'Price should be numeric!';
+    console.log(invalidmsg);
     return false;
   }
 
   const p = parseInt(price, 10);
   if (p < 0) {
-    console.log('bad price!');
+    invalidmsg = 'Negative price was given!';
+    console.log(invalidmsg);
     return false;
   }
+  return true;
+}
+
+function validateTrain(from, to, day, time, price, type) {
+  console.log(`${from} ${to} ${day} ${time} ${price} ${type}`);
+  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
+    invalidmsg = 'Empty input field!';
+    console.log(invalidmsg);
+    return false;
+  }
+  if (type !== 'ir' && type !== 'r') {
+    invalidmsg = 'Bad type was given';
+    console.log(invalidmsg);
+    return false;
+  }
+  const days = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+  if (!days.includes(day.toLowerCase())) {
+    invalidmsg = 'Bad day was given';
+    console.log(invalidmsg);
+    return false;
+  }
+  if (!validatePrice(price) || !validateTime(time)) return false;
+
   return true;
 }
 
@@ -66,7 +95,7 @@ app.post('/add_train', (req, resp) => {
     };
 
     if (validateTrain(train.from, train.to, train.day, train.time, train.price, train.type) === false) {
-      resp.status(400).send('Bad request!');
+      resp.status(400).send(`Bad request! (incorrect input values)\n${invalidmsg}`);
       return;
     }
 
@@ -95,9 +124,10 @@ app.post('/add_train', (req, resp) => {
 
 function validateSearchData(from, to, minprice, maxprice) {
   if (from === '' || to === '' || minprice === '' || maxprice === '') return false;
+  if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);
-  if (maxp < minp || maxp < 0 || minp < 0) return false;
+  if (maxp < minp) return false;
   return true;
 }
 
@@ -116,7 +146,7 @@ app.post('/search_train', (req, resp) => {
     let { maxprice } = req.body;
 
     if (validateSearchData(from, to, minprice, maxprice) === false) {
-      resp.status(400).send('Bad request!');
+      resp.status(400).send('Bad request! (incorrect input values)');
       return;
     }
     from = from.toLowerCase();
