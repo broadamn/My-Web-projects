@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <title>Vonatjáratok keresése</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+</head>
+
+<body>
+    <h1>Vonatjáratok keresése</h1>
+    <form id="search-form" action="/search_train" method="POST">
+        <label for="from">Honnan:</label>
+        <input type="text" id="from" name="from" required><br>
+
+        <label for="to">Hova:</label>
+        <input type="text" id="to" name="to" required><br>
+
+        <label for="min-price">Minimális ár:</label>
+        <input type="number" id="min-price" name="minprice" min="0" required><br>
+
+        <label for="max-price">Maximális ár:</label>
+        <input type="number" id="max-price" name="maxprice" min="0" required><br>
+
+        <input type="submit" id="submit" value="Járatok keresése"><br>
+    </form>
+    <script src="main.js"></script>
+</body>
+
+</html>

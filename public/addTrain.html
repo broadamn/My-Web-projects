@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <title>Vonatjáratok hozzáadása</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+</head>
+
+<body>
+    <h1>Vonatjárat hozzáadása</h1>
+    <form id="form" action="/add_train" method="POST">
+        <label for="from">Honnan:</label>
+        <input type="text" id="from" name="from" required><br>
+
+        <label for="to">Hova:</label>
+        <input type="text" id="to" name="to" required><br>
+
+        <label for="day">A hét melyik napján:</label>
+        <select id="day" name="day">
+            <option value="hétfő">Hétfő</option>
+            <option value="kedd">Kedd</option>
+            <option value="szerda">Szerda</option>
+            <option value="csütörtök">Csütörtök</option>
+            <option value="péntek">Péntek</option>
+            <option value="szombat">Szombat</option>
+            <option value="vasárnap">Vasárnap</option>
+        </select><br>
+
+        <label for="time">Óra:</label>
+        <input type="text" id="time" name="time" placeholder="HH:mm" required><br>
+
+        <label for="price">Jegy ára (RON):</label>
+        <input type="number" id="price" name="price" required><br>
+
+        <label for="type">Vonat típusa:</label>
+        <select id="type" name="type" required>
+            <option value="r">Regio</option>
+            <option value="ir">Inter Regio</option>
+        </select><br>
+
+        <input type="submit" id="submit" value="Járat hozzáadása"><br>
+    </form>
+    <script src="main.js"></script>
+</body>
+
+</html>
