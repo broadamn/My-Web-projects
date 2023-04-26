@@ -8,7 +8,9 @@ body {
 
 h1 {
     text-align: center;
-    margin-bottom: 30px;
+    font-size: 32px;
+    text-align: center;
+    margin-top: 20px;
 }
 
 form {
@@ -53,4 +55,25 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #006380;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+li {
+    margin: 20px;
+    font-size: 20px;
+}
+
+a {
+    color: #336699;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #003366;
 }
