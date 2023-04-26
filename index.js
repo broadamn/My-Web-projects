@@ -177,6 +177,74 @@ app.post('/search_train', (req, resp) => {
   });
 });
 
+function validateId(id) {
+  const numregex = /^\d+$/;
+
+  if (!numregex.test(id)) {
+    invalidmsg = 'id should be numeric!';
+    console.log(invalidmsg);
+    return false;
+  }
+
+  const id2 = parseInt(id, 10);
+  if (id2 < 0) {
+    invalidmsg = 'Negative id was given!';
+    console.log(invalidmsg);
+    return false;
+  }
+  return true;
+}
+
+app.post('/book_ticket', (req, resp) => {
+  // Beolvasom az adatokat a txt fileból
+  readFile('train-info.txt', 'utf-8', (err, data) => {
+    if (err) {
+      console.log('<train_info.txt> nem létezik');
+      resp.status(405).send('Vonatok állomány nem létezik');
+      return;
+    }
+
+    let { id } = req.body;
+
+    if (!validateId(id)) {
+      resp.status(400).send('Bad request! (incorrect id)');
+      return;
+    }
+
+    id = parseInt(id, 10);
+
+    let lastID = 0;
+    if (data != null) {
+      const lines = data.trim().split('\n');
+      if (lines.length > 0) {
+        const lastLine = lines[lines.length - 1];
+        lastID = parseInt(lastLine.split(' ')[0], 10);
+      }
+    }
+
+    let respBody;
+
+    if (id > lastID) {
+      resp.set('Content-Type', 'text/plain;charset=utf-8');
+      respBody = 'Nem létezik a megadott id-val rendelkező vonatjárat!';
+      resp.end(respBody);
+      return;
+    }
+    id = id.toString();
+    appendFile('foglalasok.txt', `${id}\n`, (err2) => {
+      if (err2) {
+        console.log('Hiba a foglalás való írásakor', err2);
+        resp.status(500).send('Hiba a foglalás fileba való írásakor');
+      } else {
+        respBody = 'Foglalás hozzáadva!';
+        console.log('Foglalás hozzáadva!');
+        resp.set('Content-Type', 'text/plain;charset=utf-8');
+        resp.end(respBody);
+      }
+    });
+  });
+});
+
 app.listen(8080, () => {
   console.log('Server listening on http://localhost:8080/ ...');
 });

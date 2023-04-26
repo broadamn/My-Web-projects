@@ -37,8 +37,9 @@ function validateTime(event) {
 
 function validateNum(event) {
   const obj = event.target;
+  const numregex = /^\d+$/;
 
-  if (obj.value === '') {
+  if (obj.value === '' || !numregex.test(obj.value)) {
     obj.style.backgroundColor = '#f35050b2';
     obj.style.border = '2px solid red';
     submitButton.disabled = true;
