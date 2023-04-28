@@ -9,7 +9,7 @@ const id = document.getElementById('id');
 
 function validateSubmit(event) {
   const obj = event.target;
-  if (obj.value < 0 || obj.value === '') {
+  if (obj.value < 0 || obj.value === '' || obj.value.includes('|')) {
     obj.style.backgroundColor = '#f35050b2';
     obj.style.border = '2px solid red';
     submitButton.disabled = true;

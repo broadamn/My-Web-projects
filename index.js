@@ -41,14 +41,27 @@ function validatePrice(price) {
   return true;
 }
 
-function validateTrain(from, to, day, time, price, type) {
-  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
-    invalidmsg = 'Empty input field!';
+function validateType(type) {
+  if (type !== 'ir' && type !== 'r') {
+    invalidmsg = 'Bad type was given';
     console.log(invalidmsg);
     return false;
   }
-  if (type !== 'ir' && type !== 'r') {
-    invalidmsg = 'Bad type was given';
+  return true;
+}
+
+function validateStops(from, to) {
+  if (from.includes('|') || to.includes('|')) {
+    invalidmsg = "City names cannot include '|' character";
+    console.log(invalidmsg);
+    return false;
+  }
+  return true;
+}
+
+function validateTrain(from, to, day, time, price, type) {
+  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
+    invalidmsg = 'Empty input field!';
     console.log(invalidmsg);
     return false;
   }
@@ -58,6 +71,7 @@ function validateTrain(from, to, day, time, price, type) {
     console.log(invalidmsg);
     return false;
   }
+  if (!validateType(type) || !validateStops(from, to)) return false;
   if (!validatePrice(price) || !validateTime(time)) return false;
 
   return true;
@@ -75,7 +89,7 @@ app.post('/add_train', (req, resp) => {
       const lines = data.trim().split('\n');
       if (lines.length > 0) {
         const lastLine = lines[lines.length - 1];
-        lastID = parseInt(lastLine.split(' ')[0], 10);
+        lastID = parseInt(lastLine.split('|')[0], 10);
       }
     }
 
@@ -99,7 +113,7 @@ app.post('/add_train', (req, resp) => {
     }
 
     //  kiírom az új vonat adatait a fileba
-    const trainInfo = `${train.id} ${train.from} ${train.to} ${train.day} ${train.time} ${train.price} ${train.type}\n`;
+    const trainInfo = `${train.id}|${train.from}|${train.to}|${train.day}|${train.time}|${train.price}|${train.type}\n`;
 
     appendFile('train-info.txt', trainInfo, (err2) => {
       if (err2) {
@@ -123,6 +137,7 @@ app.post('/add_train', (req, resp) => {
 
 function validateSearchData(from, to, minprice, maxprice) {
   if (from === '' || to === '' || minprice === '' || maxprice === '') return false;
+  if (from.includes('|') || to.includes('|')) return false;
   if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);
@@ -130,7 +145,7 @@ function validateSearchData(from, to, minprice, maxprice) {
   return true;
 }
 
-app.post('/search_train', (req, resp) => {
+app.get('/search_train', (req, resp) => {
   // Beolvasom az adatokat a txt fileból
   readFile('train-info.txt', 'utf-8', (err, data) => {
     if (err) {
@@ -139,10 +154,10 @@ app.post('/search_train', (req, resp) => {
       return;
     }
 
-    let { from } = req.body;
-    let { to } = req.body;
-    let { minprice } = req.body;
-    let { maxprice } = req.body;
+    let { from } = req.query;
+    let { to } = req.query;
+    let { minprice } = req.query;
+    let { maxprice } = req.query;
 
     if (validateSearchData(from, to, minprice, maxprice) === false) {
       resp.status(400).send('Bad request! (incorrect input values)');
@@ -157,7 +172,7 @@ app.post('/search_train', (req, resp) => {
 
     let result = '';
     for (let i = 0; i < lines.length; i++) {
-      const [, start, dest, , , prices] = lines[i].split(' ');
+      const [, start, dest, , , prices] = lines[i].split('|');
       const price = parseInt(prices, 10);
 
       if (start.toLowerCase() === from && dest.toLowerCase() === to && maxprice >= price && minprice <= price) {
@@ -218,7 +233,7 @@ app.post('/book_ticket', (req, resp) => {
       const lines = data.trim().split('\n');
       if (lines.length > 0) {
         const lastLine = lines[lines.length - 1];
-        lastID = parseInt(lastLine.split(' ')[0], 10);
+        lastID = parseInt(lastLine.split('|')[0], 10);
       }
     }
 

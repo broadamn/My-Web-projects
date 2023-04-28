@@ -1,3 +1,2 @@
-1 Brasso Kolozsvar Péntek 14:55 10 ir
-2 Bukarest Kolozsvar Hétfő 12:00 10 ir
-3 Bukarest Kolozsvar Hétfő 12:14 10 ir
+1|Kolozsvar|Temesvar|péntek|18:35|12|r
+2|Kolozsvar|Alba Iulia|péntek|18:35|12|r
