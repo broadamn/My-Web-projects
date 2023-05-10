@@ -58,23 +58,22 @@ input[type="submit"]:hover {
     background-color: #006380;
 }
 
-#add_train_button {
+.link_button {
     text-align: center;
-    font-size: 15px;
+    font-size: 17px;
     margin-top: 20px;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 250px;
+
     margin-top: 20px;
     transition: background-color 0.2s ease;
     opacity: 0.8;
 }
 
-#add_train_button:hover {
+.link_button:hover {
     background-color: #148db2;
-    text-size-adjust: ;
 }
 
 ul {
@@ -113,10 +112,14 @@ td {
 }
 
 th {
-    background-color: #91450f;
+    background-color: #008CBA;
     color: white;
 }
 
 tr:nth-child(even) {
     background-color: #f2f2f24c;
+}
+
+tr:nth-child(odd) {
+    background-color: #87878764;
 }

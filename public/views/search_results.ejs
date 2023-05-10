@@ -25,21 +25,21 @@
     <input type="submit" id="submit" value="Járatok keresése"><br>
   </form>
 
-  <button id="add_train_button" onclick="location.href='addTrain.html'">Vonatjárat hozzáadása</button>
+  <button class="link_button" onclick="location.href='addTrain.html'">Vonatjárat hozzáadása</button>
 
 
   <% if (results.length> 0) { %>
-    <h1>Search Results</h1>
+    <h1>Keresés eredménye</h1>
     <table>
       <thead>
         <tr>
-          <th>Journey ID</th>
-          <th>Origin</th>
-          <th>Destination</th>
-          <th>Departure Time</th>
-          <th>Day</th>
-          <th>Price</th>
-          <th>Type</th>
+          <th>Járat ID</th>
+          <th>Indulópont</th>
+          <th>Célállomás</th>
+          <th>Indulás időpontja</th>
+          <th>Nap</th>
+          <th>Jegy ára</th>
+          <th>Vonat típusa</th>
           <th>Foglalások
         </tr>
         </tr>
@@ -69,11 +69,11 @@
               <%= journey.type %>
             </td>
             <td>
-              <a href="/booking_list/<%= journey.journey_id %>">View Bookings</a>
+              <a href="/booking_list/<%= journey.journey_id %>">Foglalások megtekintése</a>
             </td>
           </tr>
           <% });} else { %>
-            <h1> No trains that match the search parameters </h1>
+            <h1> Nincs a megadott paramétereknek megfelelő vonatjárat! </h1>
             <% } %>
       </tbody>
     </table>
