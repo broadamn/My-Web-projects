@@ -116,11 +116,13 @@ app.post('/add_train', (req, resp) => {
 
 function validateSearchData(from, to, minprice, maxprice) {
   if (from === '' || to === '' || minprice === '' || maxprice === '') return false;
-  if (from.includes('|') || to.includes('|')) return false;
   if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);
-  if (maxp < minp) return false;
+  if (maxp < minp) {
+    invalidmsg = 'Minimum price should be lower then maximum price!';
+    return false;
+  }
   return true;
 }
 
@@ -134,12 +136,13 @@ app.get('/search_train', (req, res) => {
     res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
     return;
   }
-  from = from.toLowerCase();
-  to = to.toLowerCase();
+  from = `%${from.toLowerCase()}%`;
+  to = `%${to.toLowerCase()}%`;
   minprice = parseInt(minprice, 10);
   maxprice = parseInt(maxprice, 10);
 
-  const searchTrainQuery = 'SELECT * FROM journey WHERE origin = ? AND destination = ? AND price >= ? AND price <= ?';
+  const searchTrainQuery =
+    'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ?';
   const searchTrainParams = [from, to, minprice, maxprice];
 
   executeQuery(searchTrainQuery, searchTrainParams)
