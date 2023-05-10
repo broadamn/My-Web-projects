@@ -25,10 +25,8 @@
     <input type="submit" id="submit" value="Járatok keresése"><br>
   </form>
 
-  <ul>
-    <li><a href="addTrain.html">Vonatjárat hozzáadása</a></li>
-    <li><a href="bookTicket.html">Hely foglalás</a></li>
-  </ul>
+  <button id="add_train_button" onclick="location.href='addTrain.html'">Vonatjárat hozzáadása</button>
+
 
   <% if (results.length> 0) { %>
     <h1>Search Results</h1>

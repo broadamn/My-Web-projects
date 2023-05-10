@@ -1,6 +1,5 @@
 import express from 'express';
 import * as path from 'path';
-import { appendFile, readFile } from 'fs';
 import bodyParser from 'body-parser';
 import { initDb, executeQuery } from './public/db/db.js';
 
@@ -159,23 +158,23 @@ app.get('/search_train', (req, res) => {
     });
 });
 
-function validateId(id) {
-  const numregex = /^\d+$/;
+// function validateId(id) {
+//   const numregex = /^\d+$/;
 
-  if (!numregex.test(id)) {
-    invalidmsg = 'id should be numeric!';
-    console.log(invalidmsg);
-    return false;
-  }
+//   if (!numregex.test(id)) {
+//     invalidmsg = 'id should be numeric!';
+//     console.log(invalidmsg);
+//     return false;
+//   }
 
-  const id2 = parseInt(id, 10);
-  if (id2 < 0) {
-    invalidmsg = 'Negative id was given!';
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
+//   const id2 = parseInt(id, 10);
+//   if (id2 < 0) {
+//     invalidmsg = 'Negative id was given!';
+//     console.log(invalidmsg);
+//     return false;
+//   }
+//   return true;
+// }
 
 app.post('/book_ticket/:journey_id', (req, res) => {
   const journeyId = req.params.journey_id;
