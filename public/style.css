@@ -77,3 +77,25 @@ a {
 a:hover {
     color: #003366;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #91450f;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f24c;
+}

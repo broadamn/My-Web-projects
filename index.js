@@ -1,15 +1,28 @@
 import express from 'express';
-import { join } from 'path';
+import * as path from 'path';
 import { appendFile, readFile } from 'fs';
 import bodyParser from 'body-parser';
+import { initDb, executeQuery } from './public/db/db.js';
 
 const app = express();
+// const router = express.Router();
 
-const staticdir = join(process.cwd(), 'public');
+const staticdir = path.join(process.cwd(), 'public');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), './public/views'));
 
 app.use(express.static(staticdir));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+initDb()
+  .then(() => {
+    console.log('Adatbázis sikeresen létrehozva!');
+  })
+  .catch((err) => {
+    console.error('Hiba az adatbázis létrehozásakor!', err);
+  });
 
 let invalidmsg;
 
@@ -78,61 +91,35 @@ function validateTrain(from, to, day, time, price, type) {
 }
 
 app.post('/add_train', (req, resp) => {
-  // Beolvasom az adatokat a txt fileból
-  readFile('train-info.txt', 'utf-8', (err, data) => {
-    if (err) {
-      console.log('<train_info.txt> file nem léteztett, de létrehoztuk');
-    }
+  // létrehozok egy új vonat objektumot
+  const train = {
+    from: req.body.from,
+    to: req.body.to,
+    day: req.body.day,
+    time: req.body.time,
+    price: req.body.price,
+    type: req.body.type,
+  };
 
-    let lastID = 0;
-    if (data != null) {
-      const lines = data.trim().split('\n');
-      if (lines.length > 0) {
-        const lastLine = lines[lines.length - 1];
-        lastID = parseInt(lastLine.split('|')[0], 10);
-      }
-    }
+  if (validateTrain(train.from, train.to, train.day, train.time, train.price, train.type) === false) {
+    resp.status(400).send(`Bad request! (incorrect input values)\n${invalidmsg}`);
+    return;
+  }
 
-    // generálom az új vonat ID-ját
-    const newID = lastID + 1;
+  const insertTrainQuery =
+    'INSERT INTO journey (origin, destination, day, departure_time, price, type) values (?, ?, ?, ?, ?, ?)';
+  const insertTrainParams = [train.from, train.to, train.day, train.time, train.price, train.type];
 
-    // létrehozok egy új vonat objektumot
-    const train = {
-      id: newID,
-      from: req.body.from,
-      to: req.body.to,
-      day: req.body.day,
-      time: req.body.time,
-      price: req.body.price,
-      type: req.body.type,
-    };
-
-    if (validateTrain(train.from, train.to, train.day, train.time, train.price, train.type) === false) {
-      resp.status(400).send(`Bad request! (incorrect input values)\n${invalidmsg}`);
-      return;
-    }
-
-    //  kiírom az új vonat adatait a fileba
-    const trainInfo = `${train.id}|${train.from}|${train.to}|${train.day}|${train.time}|${train.price}|${train.type}\n`;
-
-    appendFile('train-info.txt', trainInfo, (err2) => {
-      if (err2) {
-        console.log('Hiba a vonat adatainak fileba való írásakor', err2);
-        resp.status(500).send('Hiba a vonat adatainak fileba való írásakor');
-      } else {
-        const respBody = `A szerver megkapta és hozzáadta a vonatot a következő információkkal:
-        ID: ${train.id}
-        Indulás: ${train.from}
-        Célállomás: ${train.to}
-        Indulás időpontja: ${train.time}
-        Jegy ára: ${train.price} ron
-        Vonat típusa: ${train.type}`;
-        console.log('Vonat hozzáadva!');
-        resp.set('Content-Type', 'text/plain;charset=utf-8');
-        resp.end(respBody);
-      }
+  executeQuery(insertTrainQuery, insertTrainParams)
+    .then(() => {
+      console.log(
+        `Vonat hozzáadva: ${train.from} ${train.to} ${train.day} ${train.time} ${train.price} ${train.type}\n`,
+      );
+      resp.redirect('/');
+    })
+    .catch((errmsg) => {
+      console.error(errmsg);
     });
-  });
 });
 
 function validateSearchData(from, to, minprice, maxprice) {
@@ -145,51 +132,31 @@ function validateSearchData(from, to, minprice, maxprice) {
   return true;
 }
 
-app.get('/search_train', (req, resp) => {
-  // Beolvasom az adatokat a txt fileból
-  readFile('train-info.txt', 'utf-8', (err, data) => {
-    if (err) {
-      console.log('<train_info.txt> nem létezik');
-      resp.status(405).send('Vonatok állomány nem létezik');
-      return;
-    }
+app.get('/search_train', (req, res) => {
+  let { from } = req.query;
+  let { to } = req.query;
+  let { minprice } = req.query;
+  let { maxprice } = req.query;
 
-    let { from } = req.query;
-    let { to } = req.query;
-    let { minprice } = req.query;
-    let { maxprice } = req.query;
+  if (validateSearchData(from, to, minprice, maxprice) === false) {
+    res.status(400).send('Bad request! (incorrect input values)');
+    return;
+  }
+  from = from.toLowerCase();
+  to = to.toLowerCase();
+  minprice = parseInt(minprice, 10);
+  maxprice = parseInt(maxprice, 10);
 
-    if (validateSearchData(from, to, minprice, maxprice) === false) {
-      resp.status(400).send('Bad request! (incorrect input values)');
-      return;
-    }
-    from = from.toLowerCase();
-    to = to.toLowerCase();
-    minprice = parseInt(minprice, 10);
-    maxprice = parseInt(maxprice, 10);
+  const searchTrainQuery = 'SELECT * FROM journey WHERE origin = ? AND destination = ? AND price >= ? AND price <= ?';
+  const searchTrainParams = [from, to, minprice, maxprice];
 
-    const lines = data.trim().split('\n');
-
-    let result = '';
-    for (let i = 0; i < lines.length; i++) {
-      const [, start, dest, , , prices] = lines[i].split('|');
-      const price = parseInt(prices, 10);
-
-      if (start.toLowerCase() === from && dest.toLowerCase() === to && maxprice >= price && minprice <= price) {
-        result += `${lines[i]}\n`;
-      }
-    }
-
-    let respBody;
-    if (result !== '') {
-      respBody = `A keresés eredménye:\n${result}`;
-    } else {
-      respBody = 'Nincs a kersettnek megfelelő vonatjárat!';
-    }
-
-    resp.set('Content-Type', 'text/plain;charset=utf-8');
-    resp.end(respBody);
-  });
+  executeQuery(searchTrainQuery, searchTrainParams)
+    .then((result) => {
+      res.render('search_results.ejs', { results: result });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 function validateId(id) {
@@ -258,6 +225,34 @@ app.post('/book_ticket', (req, resp) => {
       }
     });
   });
+});
+
+app.get('/', (req, res) => {
+  // lekérem az összes vonatot az adatbázisból
+  const query = 'SELECT * FROM journey';
+  executeQuery(query)
+    .then((result) => {
+      res.render('search_results.ejs', { results: result });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get('/booking_list/:journey_id', (req, res) => {
+  const journeyId = req.params.journey_id;
+
+  const query =
+    'SELECT reservation_id, u.user_id, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ?';
+  executeQuery(query, [journeyId])
+    .then((results) => {
+      executeQuery('SELECT * FROM user').then((users) => {
+        res.render('booking_list.ejs', { journeyId, results, users });
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 app.listen(8080, () => {

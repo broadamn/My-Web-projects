@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Booking List</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <h1>Foglalások a(z) <%= journeyId %>. számú járatra</h1>
+
+    <% if (results.length> 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>User ID</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% results.forEach((booking)=> { %>
+                    <tr>
+                        <td>
+                            <%= booking.reservation_id %>
+                        </td>
+                        <td>
+                            <%= booking.user_id %>
+                        </td>
+                        <td>
+                            <%= booking.name %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+        <% } else { %>
+            <h3>Nincsenek foglalások erre a járatra</h3>
+            <% } %>
+
+                <h1>Vonatjegy foglalás</h1>
+                <form id="form" action="/book_ticket" method="POST">
+
+                    <label for="user">Felhasználó</label>
+                    <select name="user" id="user">
+                        <% users.forEach((user)=> { %>
+                            <option value="<%= user.user_id %>">
+                                <%= user.name %>
+                            </option>
+                            <% }); %>
+                    </select><br>
+
+                    <input type="submit" id="submit" value="Jegy foglalása"><br>
+                </form>
+
+                <a href="/">Back to Search</a>
+
+                <script src="validator.js"></script>
+</body>
+
+</html>
