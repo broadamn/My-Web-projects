@@ -1,10 +1,10 @@
 import express from 'express';
 import * as path from 'path';
 import bodyParser from 'body-parser';
-import { initDb, executeQuery } from './public/db/db.js';
+import { initDb } from './public/db/db.js';
+import requestRoutes from './public/routes/requests.js';
 
 const app = express();
-// const router = express.Router();
 
 const staticdir = path.join(process.cwd(), 'public');
 
@@ -15,6 +15,8 @@ app.use(express.static(staticdir));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/', requestRoutes);
+
 initDb()
   .then(() => {
     console.log('Adatbázis sikeresen létrehozva!');
@@ -22,195 +24,6 @@ initDb()
   .catch((err) => {
     console.error('Hiba az adatbázis létrehozásakor!', err);
   });
-
-let invalidmsg;
-
-function validateTime(time) {
-  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  if (!timeRegex.test(time)) {
-    invalidmsg = 'Bad time format!';
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
-
-function validatePrice(price) {
-  const numregex = /^\d+$/;
-
-  if (!numregex.test(price)) {
-    invalidmsg = 'Price should be a positive number!';
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
-
-function validateType(type) {
-  if (type !== 'ir' && type !== 'r') {
-    invalidmsg = 'Bad type was given';
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
-
-function validateStops(from, to) {
-  if (from.includes('|') || to.includes('|')) {
-    invalidmsg = "City names cannot include '|' character";
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
-
-function validateTrain(from, to, day, time, price, type) {
-  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
-    invalidmsg = 'Empty input field!';
-    console.log(invalidmsg);
-    return false;
-  }
-  const days = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
-  if (!days.includes(day.toLowerCase())) {
-    invalidmsg = 'Bad day was given';
-    console.log(invalidmsg);
-    return false;
-  }
-  if (!validateType(type) || !validateStops(from, to)) return false;
-  if (!validatePrice(price) || !validateTime(time)) return false;
-
-  return true;
-}
-
-app.post('/add_train', (req, resp) => {
-  // létrehozok egy új vonat objektumot
-  const train = {
-    from: req.body.from,
-    to: req.body.to,
-    day: req.body.day,
-    time: req.body.time,
-    price: req.body.price,
-    type: req.body.type,
-  };
-
-  if (validateTrain(train.from, train.to, train.day, train.time, train.price, train.type) === false) {
-    resp.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
-    return;
-  }
-
-  const insertTrainQuery =
-    'INSERT INTO journey (origin, destination, day, departure_time, price, type) values (?, ?, ?, ?, ?, ?)';
-  const insertTrainParams = [train.from, train.to, train.day, train.time, train.price, train.type];
-
-  executeQuery(insertTrainQuery, insertTrainParams)
-    .then(() => {
-      console.log(
-        `Vonat hozzáadva: ${train.from} ${train.to} ${train.day} ${train.time} ${train.price} ${train.type}\n`,
-      );
-      resp.redirect('/');
-    })
-    .catch((errmsg) => {
-      console.error(errmsg);
-    });
-});
-
-function validateSearchData(from, to, minprice, maxprice) {
-  if (from === '' || to === '' || minprice === '' || maxprice === '') return false;
-  if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
-  const maxp = parseInt(maxprice, 10);
-  const minp = parseInt(minprice, 10);
-  if (maxp < minp) {
-    invalidmsg = 'Minimum price should be lower then maximum price!';
-    return false;
-  }
-  return true;
-}
-
-app.get('/search_train', (req, res) => {
-  let { from } = req.query;
-  let { to } = req.query;
-  let { minprice } = req.query;
-  let { maxprice } = req.query;
-
-  if (validateSearchData(from, to, minprice, maxprice) === false) {
-    res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
-    return;
-  }
-  from = `%${from.toLowerCase()}%`;
-  to = `%${to.toLowerCase()}%`;
-  minprice = parseInt(minprice, 10);
-  maxprice = parseInt(maxprice, 10);
-
-  const searchTrainQuery =
-    'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ?';
-  const searchTrainParams = [from, to, minprice, maxprice];
-
-  executeQuery(searchTrainQuery, searchTrainParams)
-    .then((result) => {
-      res.render('search_results.ejs', { results: result });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
-
-function validateId(id) {
-  const numregex = /^\d+$/;
-
-  if (!numregex.test(id)) {
-    invalidmsg = 'Incorrect ID was given!';
-    console.log(invalidmsg);
-    return false;
-  }
-  return true;
-}
-
-app.post('/book_ticket/:journey_id', (req, res) => {
-  const journeyId = req.params.journey_id;
-  const userId = req.body.user;
-
-  if (!validateId(journeyId) || !validateId(userId)) {
-    res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
-    return;
-  }
-
-  executeQuery('INSERT INTO RESERVATION (journey_id, user_id) VALUES (?, ?)', [journeyId, userId])
-    .then(() => {
-      res.redirect(`/booking_list/${journeyId}?message=success`);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.redirect(`/booking_list/${journeyId}?message=error`);
-    });
-});
-
-app.get('/', (req, res) => {
-  // lekérem az összes vonatot az adatbázisból
-  const query = 'SELECT * FROM journey';
-  executeQuery(query)
-    .then((result) => {
-      res.render('search_results.ejs', { results: result });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
-
-app.get('/booking_list/:journey_id', (req, res) => {
-  const journeyId = req.params.journey_id;
-
-  const query =
-    'SELECT reservation_id, u.user_id, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
-  executeQuery(query, [journeyId])
-    .then((results) => {
-      executeQuery('SELECT * FROM user').then((users) => {
-        res.render('booking_list.ejs', { journeyId, results, users });
-      });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
 
 app.listen(8080, () => {
   console.log('Server listening on http://localhost:8080/ ...');
