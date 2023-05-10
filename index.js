@@ -39,14 +39,7 @@ function validatePrice(price) {
   const numregex = /^\d+$/;
 
   if (!numregex.test(price)) {
-    invalidmsg = 'Price should be numeric!';
-    console.log(invalidmsg);
-    return false;
-  }
-
-  const p = parseInt(price, 10);
-  if (p < 0) {
-    invalidmsg = 'Negative price was given!';
+    invalidmsg = 'Price should be a positive number!';
     console.log(invalidmsg);
     return false;
   }
@@ -101,7 +94,7 @@ app.post('/add_train', (req, resp) => {
   };
 
   if (validateTrain(train.from, train.to, train.day, train.time, train.price, train.type) === false) {
-    resp.status(400).send(`Bad request! (incorrect input values)\n${invalidmsg}`);
+    resp.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
     return;
   }
 
@@ -138,7 +131,7 @@ app.get('/search_train', (req, res) => {
   let { maxprice } = req.query;
 
   if (validateSearchData(from, to, minprice, maxprice) === false) {
-    res.status(400).send('Bad request! (incorrect input values)');
+    res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
     return;
   }
   from = from.toLowerCase();
@@ -158,27 +151,25 @@ app.get('/search_train', (req, res) => {
     });
 });
 
-// function validateId(id) {
-//   const numregex = /^\d+$/;
+function validateId(id) {
+  const numregex = /^\d+$/;
 
-//   if (!numregex.test(id)) {
-//     invalidmsg = 'id should be numeric!';
-//     console.log(invalidmsg);
-//     return false;
-//   }
-
-//   const id2 = parseInt(id, 10);
-//   if (id2 < 0) {
-//     invalidmsg = 'Negative id was given!';
-//     console.log(invalidmsg);
-//     return false;
-//   }
-//   return true;
-// }
+  if (!numregex.test(id)) {
+    invalidmsg = 'Incorrect ID was given!';
+    console.log(invalidmsg);
+    return false;
+  }
+  return true;
+}
 
 app.post('/book_ticket/:journey_id', (req, res) => {
   const journeyId = req.params.journey_id;
   const userId = req.body.user;
+
+  if (!validateId(journeyId) || !validateId(userId)) {
+    res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${invalidmsg}` });
+    return;
+  }
 
   executeQuery('INSERT INTO RESERVATION (journey_id, user_id) VALUES (?, ?)', [journeyId, userId])
     .then(() => {
