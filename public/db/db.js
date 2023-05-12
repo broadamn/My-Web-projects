@@ -32,7 +32,7 @@ export function initDb() {
               console.error(err1);
               reject(err1);
             } else {
-              console.log('Járatok tábla létrehozva!');
+              console.log('Járatok tábla rendben!');
             }
           },
         );
@@ -47,7 +47,7 @@ export function initDb() {
               console.error(err2);
               reject(err2);
             } else {
-              console.log('Felhasználók tábla létrehozva!');
+              console.log('Felhasználók tábla rendben!');
             }
           },
         );
@@ -65,7 +65,7 @@ export function initDb() {
               console.error(err3);
               reject(err3);
             } else {
-              console.log('Foglalások tábla létrehozva!\n');
+              console.log('Foglalások tábla rendben!\n');
               resolve(resp);
             }
           },
