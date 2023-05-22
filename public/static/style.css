@@ -2,6 +2,7 @@ body {
     background-image: url("../pictures/background1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 20px;
@@ -13,11 +14,11 @@ h1 {
     text-align: center;
     margin-top: 20px;
     color: #008CBA;
-    text-shadow: 
-    -1px -1px 0 rgba(253, 253, 255, 0),
-     1px -1px 0 rgba(253, 253, 255, 0),
-     1px  1px 0 rgb(253, 253, 255),
-     1px  1px 0 rgb(255, 255, 255);
+    text-shadow:
+        -1px -1px 0 rgba(253, 253, 255, 0),
+        1px -1px 0 rgba(253, 253, 255, 0),
+        1px 1px 0 rgb(253, 253, 255),
+        1px 1px 0 rgb(255, 255, 255);
 }
 
 form {
@@ -27,6 +28,7 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 500px;
     margin: auto;
+    margin-bottom: 20px;
     opacity: 0.8;
 }
 
@@ -69,11 +71,9 @@ input[type="submit"]:hover {
     font-size: 14px;
     background-color: #fff;
     border-radius: 10px;
-    color:rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     height: 40px;
-    margin-top: 20px;
-    padding: 10px;
     transition: background-color 0.1s ease, color 0.1s ease;
     opacity: 0.8;
 }
@@ -81,6 +81,28 @@ input[type="submit"]:hover {
 .link_button:hover {
     background-color: #148db2;
     color: #fff;
+}
+
+.delete-button {
+    text-align: center;
+    font-size: 14px;
+    background-color: #c22727;
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 25px;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    opacity: 0.8;
+}
+
+.delete-button:hover {
+    background-color: #ff0101;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(252, 252, 252, 0.836);
+}
+
+.delete-cell {
+    text-align: center;
 }
 
 ul {
@@ -129,4 +151,24 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: #87878764;
+}
+
+.hidden {
+    font-size: 0px;
+    opacity: 0;
+    visibility: hidden;
+    height: 0px;
+    transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
+}
+
+.visible {
+    font-size: 14px;
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+    transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
+}
+
+.additional-info-cell {
+    text-align: center;
 }

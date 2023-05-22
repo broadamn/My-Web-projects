@@ -81,15 +81,56 @@ if (id != null) {
   id.addEventListener('input', validateNum);
 }
 
-function fetchJourneyInfo(journeyId) {
-  const infoElement = document.getElementById(`info-${journeyId}`);
+const journeyRows = document.querySelectorAll('.journey-row');
+journeyRows.forEach((row) => {
+  row.addEventListener('click', () => {
+    const { journeyId } = row.dataset;
+    const additionalInfoRow = row.nextElementSibling;
+    const additionalInfoCell = additionalInfoRow.querySelector('.additional-info-cell');
 
-  fetch(`/journey_info/${journeyId}`)
-    .then((response) => response.text())
-    .then((data) => {
-      infoElement.innerHTML = data;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+    if (additionalInfoRow.classList.contains('hidden')) {
+      additionalInfoRow.classList.add('visible');
+      additionalInfoRow.classList.remove('hidden');
+
+      fetch(`/journey_details/${journeyId}`)
+        .then((response) => response.text())
+        .then((details) => {
+          additionalInfoCell.textContent = details;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      additionalInfoRow.classList.add('hidden');
+      additionalInfoRow.classList.remove('visible');
+      setTimeout(() => {
+        additionalInfoCell.textContent = null;
+      }, 500);
+    }
+  });
+});
+
+const deleteButtons = document.querySelectorAll('.delete-button');
+deleteButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const { reservationId } = button.dataset;
+    const reservationRow = button.parentElement.parentElement;
+
+    fetch(`/delete_reservation/${reservationId}`, { method: 'DELETE' })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          reservationRow.classList.add('hidden');
+          setTimeout(() => {
+            reservationRow.remove();
+            alert('Foglalás sikeresen törölve!');
+          }, 500);
+        } else {
+          alert('Hiba történt a foglalás törlése során.');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
+});

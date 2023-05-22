@@ -111,14 +111,31 @@ router.get('/booking_list/:journey_id', (req, res) => {
     });
 });
 
-router.get('/journey_info/:journeyId', (req, res) => {
+router.get('/journey_details/:journeyId', (req, res) => {
   const { journeyId } = req.params;
 
-  // Code to fetch additional journey information based on journeyId
-  // Replace the following line with your actual code
-  const additionalInfo = `Extra information for Journey ID: ${journeyId}`;
+  executeQuery('SELECT price, type FROM journey WHERE journey_id = ?', [journeyId])
+    .then((details) => {
+      const { price, type } = details[0];
+      const additionalInfo = `Jegy ára: ${price} RON, Vonat típusa: ${type}`;
+      res.send(additionalInfo);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 
-  res.send(additionalInfo);
+router.delete('/delete_reservation/:reservationId', (req, res) => {
+  const { reservationId } = req.params;
+
+  executeQuery('DELETE FROM reservation WHERE reservation_id = ?', [reservationId])
+    .then(() => {
+      res.json({ success: true });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.json({ success: false, error: 'Failed to delete the reservation.' });
+    });
 });
 
 export default router;

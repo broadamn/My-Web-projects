@@ -32,11 +32,18 @@
     <h1>Keresés eredménye</h1>
     <table>
       <thead>
-        <!-- Table headers... -->
+        <tr>
+          <th>Járat ID</th>
+          <th>Indulópont</th>
+          <th>Célállomás</th>
+          <th>Indulás időpontja</th>
+          <th>Nap</th>
+          <th>Foglalások</th>
+        </tr>
       </thead>
       <tbody>
         <% results.forEach((journey)=> { %>
-          <tr>
+          <tr class="journey-row" data-journey-id="<%= journey.journey_id %>">
             <td>
               <%= journey.journey_id %>
             </td>
@@ -55,9 +62,9 @@
             <td>
               <a href="/booking_list/<%= journey.journey_id %>">Foglalások megtekintése</a>
             </td>
-            <td>
-              <div id="info-<%= journey.journey_id %>" onclick="fetchJourneyInfo(<%= journey.journey_id %>)">.</div>
-            </td>
+          <tr class="hidden">
+            <td colspan="6" class="additional-info-cell"></td>
+          </tr>
           </tr>
           <% }); %>
       </tbody>
@@ -66,10 +73,8 @@
       <h1>Nincs a megadott paramétereknek megfelelő vonatjárat!</h1>
       <% } %>
 
-        <script src="../static/vaildator.js"></script>
-        <script>
-          
-        </script>
+        <script src="../static/script.js"></script>
+
 </body>
 
 </html>
