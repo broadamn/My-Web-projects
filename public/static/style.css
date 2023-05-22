@@ -1,5 +1,5 @@
 body {
-    background-image: url("../pictures/background1.jpg");
+    background-image: url("../pictures/background.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -22,10 +22,10 @@ h1 {
 }
 
 form {
-    background-color: #fff;
+    background-color: #00d1dc96;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.804);
     width: 500px;
     margin: auto;
     margin-bottom: 20px;
@@ -57,13 +57,15 @@ input[type="submit"] {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 0 5px rgba(252, 252, 252, 0.804);
     display: block;
     margin: 0 auto;
 }
 
 input[type="submit"]:hover {
-    background-color: #006380;
+    background-color: #0079c4;
+    box-shadow: 0 0 15px rgba(254, 254, 254, 0.915);
+    transition: background-color 0.3s ease;
 }
 
 .link_button {
@@ -128,6 +130,7 @@ a:hover {
 
 
 table {
+    color: rgb(227, 227, 227);
     border-collapse: collapse;
     margin: 0 auto;
     margin-bottom: 20px;
@@ -146,11 +149,11 @@ th {
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f24c;
+    background-color: #536d72ae;
 }
 
 tr:nth-child(odd) {
-    background-color: #87878764;
+    background-color: #2c4449d0;
 }
 
 .hidden {
