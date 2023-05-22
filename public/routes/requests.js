@@ -111,4 +111,14 @@ router.get('/booking_list/:journey_id', (req, res) => {
     });
 });
 
+router.get('/journey_info/:journeyId', (req, res) => {
+  const { journeyId } = req.params;
+
+  // Code to fetch additional journey information based on journeyId
+  // Replace the following line with your actual code
+  const additionalInfo = `Extra information for Journey ID: ${journeyId}`;
+
+  res.send(additionalInfo);
+});
+
 export default router;

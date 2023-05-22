@@ -80,3 +80,16 @@ if (maxp != null) {
 if (id != null) {
   id.addEventListener('input', validateNum);
 }
+
+function fetchJourneyInfo(journeyId) {
+  const infoElement = document.getElementById(`info-${journeyId}`);
+
+  fetch(`/journey_info/${journeyId}`)
+    .then((response) => response.text())
+    .then((data) => {
+      infoElement.innerHTML = data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
