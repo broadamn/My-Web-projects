@@ -120,6 +120,7 @@ router.get('/journey_details/:journeyId', (req, res) => {
     })
     .catch((error) => {
       console.error(error);
+      res.sendStatus(500);
     });
 });
 
