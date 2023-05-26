@@ -116,9 +116,7 @@ router.get('/journey_details/:journeyId', (req, res) => {
 
   executeQuery('SELECT price, type FROM journey WHERE journey_id = ?', [journeyId])
     .then((details) => {
-      const { price, type } = details[0];
-      const additionalInfo = `Jegy ára: ${price} RON, Vonat típusa: ${type}`;
-      res.send(additionalInfo);
+      res.send(details[0]);
     })
     .catch((error) => {
       console.error(error);
@@ -130,11 +128,11 @@ router.delete('/delete_reservation/:reservationId', (req, res) => {
 
   executeQuery('DELETE FROM reservation WHERE reservation_id = ?', [reservationId])
     .then(() => {
-      res.json({ success: true });
+      res.sendStatus(200);
     })
     .catch((error) => {
       console.error(error);
-      res.json({ success: false, error: 'Failed to delete the reservation.' });
+      res.sendStatus(500);
     });
 });
 

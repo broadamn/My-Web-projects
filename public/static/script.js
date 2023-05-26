@@ -93,9 +93,10 @@ journeyRows.forEach((row) => {
       additionalInfoRow.classList.remove('hidden');
 
       fetch(`/journey_details/${journeyId}`)
-        .then((response) => response.text())
-        .then((details) => {
-          additionalInfoCell.textContent = details;
+        .then((response) => response.json())
+        .then((data) => {
+          const { price , type} = data;
+          additionalInfoCell.textContent = `Jegy ára: ${price} Vonat típusa: ${type}`;
         })
         .catch((error) => {
           console.error(error);
@@ -117,9 +118,8 @@ deleteButtons.forEach((button) => {
     const reservationRow = button.parentElement.parentElement;
 
     fetch(`/delete_reservation/${reservationId}`, { method: 'DELETE' })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
+      .then((response) => {
+        if (response.ok) {
           reservationRow.classList.add('hidden');
           setTimeout(() => {
             reservationRow.remove();
