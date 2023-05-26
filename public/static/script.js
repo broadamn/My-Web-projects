@@ -95,7 +95,7 @@ journeyRows.forEach((row) => {
       fetch(`/journey_details/${journeyId}`)
         .then((response) => response.json())
         .then((data) => {
-          const { price , type} = data;
+          const { price, type } = data;
           additionalInfoCell.textContent = `Jegy ára: ${price} Vonat típusa: ${type}`;
         })
         .catch((error) => {
