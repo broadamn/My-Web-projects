@@ -1,5 +1,14 @@
 import express from 'express';
-import { executeQuery } from '../db/db.js';
+import {
+  deleteReservationbyId,
+  getJourneyDetailsById,
+  getAllJourneys,
+  getBookingsByJourneyId,
+  insertReservation,
+  insertTrain,
+  getAllUsers,
+  searchTrain,
+} from '../db/db.js';
 import { validateTrain, validateSearchData, validateId, getInvalidMessage } from '../validation/validator.js';
 
 const router = express.Router();
@@ -20,19 +29,18 @@ router.post('/add_train', (req, resp) => {
     return;
   }
 
-  const insertTrainQuery =
-    'INSERT INTO journey (origin, destination, day, departure_time, price, type) values (?, ?, ?, ?, ?, ?)';
   const insertTrainParams = [train.from, train.to, train.day, train.time, train.price, train.type];
 
-  executeQuery(insertTrainQuery, insertTrainParams)
+  insertTrain(insertTrainParams)
     .then(() => {
       console.log(
-        `Vonat hozzáadva: ${train.from} ${train.to} ${train.day} ${train.time} ${train.price} ${train.type}\n`,
+        `Vonat hozzáadva: ${train.from} - ${train.to} ${train.day} ${train.time} ${train.price} ${train.type}\n`,
       );
       resp.redirect('/');
     })
     .catch((errmsg) => {
       console.error(errmsg);
+      resp.render('error.ejs', { message: 'Hiba a vonat hozzáadásakor!', problem: `${errmsg}` });
     });
 });
 
@@ -51,11 +59,9 @@ router.get('/search_train', (req, res) => {
   minprice = parseInt(minprice, 10);
   maxprice = parseInt(maxprice, 10);
 
-  const searchTrainQuery =
-    'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ?';
   const searchTrainParams = [from, to, minprice, maxprice];
 
-  executeQuery(searchTrainQuery, searchTrainParams)
+  searchTrain(searchTrainParams)
     .then((result) => {
       res.render('search_results.ejs', { results: result });
     })
@@ -73,7 +79,7 @@ router.post('/book_ticket/:journey_id', (req, res) => {
     return;
   }
 
-  executeQuery('INSERT INTO RESERVATION (journey_id, user_id) VALUES (?, ?)', [journeyId, userId])
+  insertReservation([journeyId, userId])
     .then(() => {
       res.redirect(`/booking_list/${journeyId}?message=success`);
     })
@@ -85,8 +91,7 @@ router.post('/book_ticket/:journey_id', (req, res) => {
 
 router.get('/', (req, res) => {
   // lekérem az összes vonatot az adatbázisból
-  const query = 'SELECT * FROM journey';
-  executeQuery(query)
+  getAllJourneys()
     .then((result) => {
       res.render('search_results.ejs', { results: result });
     })
@@ -98,11 +103,9 @@ router.get('/', (req, res) => {
 router.get('/booking_list/:journey_id', (req, res) => {
   const journeyId = req.params.journey_id;
 
-  const query =
-    'SELECT reservation_id, u.user_id, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
-  executeQuery(query, [journeyId])
+  getBookingsByJourneyId(journeyId)
     .then((results) => {
-      executeQuery('SELECT * FROM user').then((users) => {
+      getAllUsers().then((users) => {
         res.render('booking_list.ejs', { journeyId, results, users });
       });
     })
@@ -114,7 +117,7 @@ router.get('/booking_list/:journey_id', (req, res) => {
 router.get('/journey_details/:journeyId', (req, res) => {
   const { journeyId } = req.params;
 
-  executeQuery('SELECT price, type FROM journey WHERE journey_id = ?', [journeyId])
+  getJourneyDetailsById(journeyId)
     .then((details) => {
       res.send(details[0]);
     })
@@ -127,9 +130,9 @@ router.get('/journey_details/:journeyId', (req, res) => {
 router.delete('/delete_reservation/:reservationId', (req, res) => {
   const { reservationId } = req.params;
 
-  executeQuery('DELETE FROM reservation WHERE reservation_id = ?', [reservationId])
+  deleteReservationbyId(reservationId)
     .then(() => {
-      res.sendStatus(200);
+      res.sendStatus(204);
     })
     .catch((error) => {
       console.error(error);

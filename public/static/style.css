@@ -168,8 +168,22 @@ tr:nth-child(odd) {
     font-size: 14px;
     opacity: 1;
     visibility: visible;
-    height: auto;
+    height: 16px;
     transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
+}
+
+.hidden > .additional-info-cell {
+    height: 0px;
+    padding: 0px;
+    margin: 0px;
+    transition: height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
+}
+
+.visible > .additional-info-cell {
+    height: auto;
+    padding: auto;
+    margin: auto;
+    transition: height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
 }
 
 .additional-info-cell {

@@ -96,3 +96,44 @@ export function executeQuery(query, params) {
     });
   });
 }
+
+export function deleteReservationbyId(id) {
+  const query = 'DELETE FROM reservation WHERE reservation_id = ?';
+  return executeQuery(query, [id]);
+}
+
+export function getJourneyDetailsById(id) {
+  const query = 'SELECT * FROM journey WHERE journey_id = ?';
+  return executeQuery(query, [id]);
+}
+
+export function getAllJourneys() {
+  const query = 'SELECT * FROM journey';
+  return executeQuery(query);
+}
+
+export function getBookingsByJourneyId(id) {
+  const query =
+    'SELECT reservation_id, u.user_id, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
+  return executeQuery(query, [id]);
+}
+
+export function insertReservation(params) {
+  const query = 'INSERT INTO RESERVATION (journey_id, user_id) VALUES (?, ?)';
+  return executeQuery(query, params);
+}
+
+export function insertTrain(params) {
+  const query = 'INSERT INTO journey (origin, destination, day, departure_time, price, type) values (?, ?, ?, ?, ?, ?)';
+  return executeQuery(query, params);
+}
+
+export function getAllUsers() {
+  const query = 'SELECT * FROM user';
+  return executeQuery(query);
+}
+
+export function searchTrain(params) {
+  const query = 'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ?';
+  return executeQuery(query, params);
+}

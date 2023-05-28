@@ -100,6 +100,7 @@ journeyRows.forEach((row) => {
         })
         .catch((error) => {
           console.error(error);
+          alert('Hiba történt a a járat információinak listázása során.');
         });
     } else {
       additionalInfoRow.classList.add('hidden');
@@ -131,6 +132,7 @@ deleteButtons.forEach((button) => {
       })
       .catch((error) => {
         console.error(error);
+        alert('Hiba történt a foglalás törlése során.');
       });
   });
 });
