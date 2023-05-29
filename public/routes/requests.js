@@ -76,14 +76,15 @@ router.get('/search_train', (req, res) => {
 
 router.post('/book_ticket/:journey_id', (req, res) => {
   const journeyId = req.params.journey_id;
+  const weekNum = req.body.week;
   const userId = req.body.user;
 
-  if (!validateId(journeyId) || !validateId(userId)) {
+  if (!validateId(journeyId) || !validateId(userId) || !validateId(weekNum)) {
     res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${getInvalidMessage()}` });
     return;
   }
 
-  insertReservation([journeyId, userId])
+  insertReservation([journeyId, userId, weekNum])
     .then(() => {
       res.redirect(`/booking_list/${journeyId}?message=success`);
     })

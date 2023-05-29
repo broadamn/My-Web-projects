@@ -57,6 +57,7 @@ export function initDb() {
             reservation_id INT AUTO_INCREMENT PRIMARY KEY,
             journey_id INT NOT NULL,
             user_id INT NOT NULL,
+            week_number INT,
             FOREIGN KEY (journey_id) REFERENCES journey(journey_id),
             FOREIGN KEY (user_id) REFERENCES user(user_id)
           );`,
@@ -114,12 +115,12 @@ export function getAllJourneys() {
 
 export function getBookingsByJourneyId(id) {
   const query =
-    'SELECT reservation_id, u.user_id, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
+    'SELECT reservation_id, u.user_id, week_number, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
   return executeQuery(query, [id]);
 }
 
 export function insertReservation(params) {
-  const query = 'INSERT INTO RESERVATION (journey_id, user_id) VALUES (?, ?)';
+  const query = 'INSERT INTO RESERVATION (journey_id, user_id, week_number) VALUES (?, ?, ?)';
   return executeQuery(query, params);
 }
 

@@ -17,6 +17,7 @@
                 <tr>
                     <th>Foglalás ID</th>
                     <th>Felhasználó ID</th>
+                    <th>Hét sorszáma</th>
                     <th>Név</th>
                     <th>Foglalás törlése</th>
                 </tr>
@@ -29,6 +30,9 @@
                         </td>
                         <td>
                             <%= booking.user_id %>
+                        </td>
+                        <td>
+                            <%= booking.week_number %>
                         </td>
                         <td>
                             <%= booking.name %>
@@ -54,6 +58,14 @@
                                 <%= user.name %>
                             </option>
                             <% }); %>
+                    </select><br>
+
+                    <label for="week">Hét</label>
+                    <select name="week" id="week">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
                     </select><br>
 
                     <input type="submit" id="submit" value="Jegy foglalása"><br>
