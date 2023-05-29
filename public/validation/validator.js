@@ -13,7 +13,7 @@ export function validateTime(time) {
 export function validatePrice(price) {
   const numregex = /^\d+$/;
 
-  if (!numregex.test(price)) {
+  if (price !== '' && !numregex.test(price)) {
     invalidmsg = 'Price should be a positive number!';
     console.log(invalidmsg);
     return false;
@@ -48,7 +48,6 @@ export function validateTrain(from, to, day, time, price, type) {
 }
 
 export function validateSearchData(from, to, minprice, maxprice) {
-  if (from === '' || to === '' || minprice === '' || maxprice === '') return false;
   if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);

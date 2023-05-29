@@ -134,6 +134,6 @@ export function getAllUsers() {
 }
 
 export function searchTrain(params) {
-  const query = 'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ?';
+  const query = 'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ? ';
   return executeQuery(query, params);
 }
