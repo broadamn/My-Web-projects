@@ -65,19 +65,19 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #0079c4;
     box-shadow: 0 0 15px rgba(254, 254, 254, 0.915);
-    transition: background-color 0.3s ease;
+    transition: 0.2s;
 }
 
 .link_button {
     text-align: center;
     font-size: 14px;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 6px;
     color: rgb(0, 0, 0);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     height: 40px;
-    transition: background-color 0.1s ease, color 0.1s ease;
+    transition: 0.2s;
     opacity: 0.8;
+    cursor: pointer;
 }
 
 .link_button:hover {
@@ -95,6 +95,7 @@ input[type="submit"]:hover {
     height: 25px;
     transition: background-color 0.1s ease, color 0.1s ease;
     opacity: 0.8;
+    cursor: pointer;
 }
 
 .delete-button:hover {
@@ -120,12 +121,16 @@ li {
 }
 
 a {
-    color: #336699;
+    color: #008CBA;
     text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 a:hover {
-    color: #003366;
+    color: #38acd3;
+    text-shadow:
+        2px 2px 0 #02506a;
 }
 
 
@@ -172,14 +177,14 @@ tr:nth-child(odd) {
     transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
 }
 
-.hidden > .additional-info-cell {
+.hidden>.additional-info-cell {
     height: 0px;
     padding: 0px;
     margin: 0px;
     transition: height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
 }
 
-.visible > .additional-info-cell {
+.visible>.additional-info-cell {
     height: auto;
     padding: auto;
     margin: auto;
