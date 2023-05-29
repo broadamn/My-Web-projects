@@ -11,7 +11,6 @@ body {
 h1 {
     text-align: center;
     font-size: 32px;
-    text-align: center;
     margin-top: 20px;
     color: #008CBA;
     text-shadow:
@@ -23,7 +22,8 @@ h1 {
 
 form {
     background-color: #00d1dc96;
-    padding: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
     border-radius: 5px;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.804);
     width: 500px;
@@ -34,7 +34,7 @@ form {
 
 label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 input[type="text"],
@@ -45,7 +45,6 @@ select {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    margin-bottom: 20px;
     display: block;
     margin: 0 auto;
 }
@@ -72,7 +71,7 @@ input[type="submit"]:hover {
     text-align: center;
     font-size: 14px;
     background-color: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
     color: rgb(0, 0, 0);
     height: 40px;
     transition: 0.2s;
@@ -166,7 +165,7 @@ tr:nth-child(odd) {
     opacity: 0;
     visibility: hidden;
     height: 0px;
-    transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
+    transition: 0.5s;
 }
 
 .visible {
@@ -174,7 +173,7 @@ tr:nth-child(odd) {
     opacity: 1;
     visibility: visible;
     height: 16px;
-    transition: opacity 0.3s ease-in-out, visibility 0.5s ease-in-out, height 0.5s ease-in-out, font-size 0.5s ease-in-out;
+    transition: 0.5s;
 }
 
 .hidden>.additional-info-cell {
@@ -193,4 +192,25 @@ tr:nth-child(odd) {
 
 .additional-info-cell {
     text-align: center;
+}
+
+.add-train-container {
+    position: fixed;
+    top: 20px;
+    right: -510px;
+    transition: 1s;
+}
+
+.add-train-container.open {
+    right: 10%;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.search-train-container {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    transition: margin-left 0.8s ease-out;
 }

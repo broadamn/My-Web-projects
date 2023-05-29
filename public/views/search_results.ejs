@@ -9,70 +9,107 @@
 </head>
 
 <body>
-  <h1>Vonatjáratok keresése</h1>
-  <form id="search-form" action="/search_train" method="GET">
-    <label for="from">Honnan:</label>
-    <input type="text" id="from" name="from"><br>
+  <div class="search-train-container" id="search-train-container" >
+    <h1>Vonatjáratok keresése</h1>
+    <form id="search-form" action="/search_train" method="GET">
+      <label for="from">Honnan:</label>
+      <input type="text" id="from" name="from"><br>
 
-    <label for="to">Hova:</label>
-    <input type="text" id="to" name="to"><br>
+      <label for="to">Hova:</label>
+      <input type="text" id="to" name="to"><br>
 
-    <label for="min-price">Minimális ár:</label>
-    <input type="number" id="min-price" name="minprice" min="0"><br>
+      <label for="min-price">Minimális ár:</label>
+      <input type="number" id="min-price" name="minprice" min="0"><br>
 
-    <label for="max-price">Maximális ár:</label>
-    <input type="number" id="max-price" name="maxprice" min="0"><br>
+      <label for="max-price">Maximális ár:</label>
+      <input type="number" id="max-price" name="maxprice" min="0"><br>
 
-    <input type="submit" id="submit" value="Járatok keresése"><br>
-  </form>
+      <input type="submit" id="submit" value="Járatok keresése"><br>
+    </form>
 
-  <button class="link_button" onclick="location.href='../static/addTrain.html'">Vonatjárat hozzáadása</button>
+    <button class="link_button" id="add-train-button">Vonatjárat hozzáadása</button>
 
-
-  <% if (results.length> 0) { %>
-    <h1>Keresés eredménye</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Járat ID</th>
-          <th>Indulópont</th>
-          <th>Célállomás</th>
-          <th>Indulás időpontja</th>
-          <th>Nap</th>
-          <th style= "text-align: center;">Foglalások</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% results.forEach((journey)=> { %>
-          <tr class="journey-row" data-journey-id="<%= journey.journey_id %>">
-            <td>
-              <%= journey.journey_id %>
-            </td>
-            <td>
-              <%= journey.origin %>
-            </td>
-            <td>
-              <%= journey.destination %>
-            </td>
-            <td>
-              <%= journey.departure_time %>
-            </td>
-            <td>
-              <%= journey.day %>
-            </td>
-            <td>
-              <a href="/booking_list/<%= journey.journey_id %>">Foglalások megtekintése</a>
-            </td>
+    <% if (results.length> 0) { %>
+      <h1>Keresés eredménye</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Járat ID</th>
+            <th>Indulópont</th>
+            <th>Célállomás</th>
+            <th>Indulás időpontja</th>
+            <th>Nap</th>
+            <th style= "text-align: center;">Foglalások</th>
           </tr>
-          <tr class="hidden">
-            <td colspan="6" class="additional-info-cell removed"></td>
-          </tr>
-          <% }); %>
-      </tbody>
-    </table>
-    <% } else { %>
-      <h1>Nincs a megadott paramétereknek megfelelő vonatjárat!</h1>
-      <% } %>
+        </thead>
+        <tbody>
+          <% results.forEach((journey)=> { %>
+            <tr class="journey-row" data-journey-id="<%= journey.journey_id %>">
+              <td>
+                <%= journey.journey_id %>
+              </td>
+              <td>
+                <%= journey.origin %>
+              </td>
+              <td>
+                <%= journey.destination %>
+              </td>
+              <td>
+                <%= journey.departure_time %>
+              </td>
+              <td>
+                <%= journey.day %>
+              </td>
+              <td>
+                <a href="/booking_list/<%= journey.journey_id %>">Foglalások megtekintése</a>
+              </td>
+            </tr>
+            <tr class="hidden">
+              <td colspan="6" class="additional-info-cell removed"></td>
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <h1>Nincs a megadott paramétereknek megfelelő vonatjárat!</h1>
+        <% } %>
+  </div>
+
+  <div class="add-train-container" id="add-train-container">
+  <h1>Vonatjárat hozzáadása</h1>
+    <form id="add-train-form" action="/add_train" method="POST">
+        <label for="from">Honnan:</label>
+        <input type="text" id="from" name="from" required><br>
+
+        <label for="to">Hova:</label>
+        <input type="text" id="to" name="to" required><br>
+
+        <label for="day">A hét melyik napján:</label>
+        <select id="day" name="day">
+            <option value="hétfő">Hétfő</option>
+            <option value="kedd">Kedd</option>
+            <option value="szerda">Szerda</option>
+            <option value="csütörtök">Csütörtök</option>
+            <option value="péntek">Péntek</option>
+            <option value="szombat">Szombat</option>
+            <option value="vasárnap">Vasárnap</option>
+        </select><br>
+
+        <label for="time">Óra:</label>
+        <input type="text" id="time" name="time" placeholder="HH:mm" required><br>
+
+        <label for="price">Jegy ára (RON):</label>
+        <input type="number" id="price" name="price" required><br>
+
+        <label for="type">Vonat típusa:</label>
+        <select id="type" name="type" required>
+            <option value="r">Regio</option>
+            <option value="ir">Inter Regio</option>
+        </select><br>
+
+        <input type="submit" id="submit" value="Járat hozzáadása"><br>
+    </form>
+  </div>
 
         <script src="../static/script.js"></script>
 

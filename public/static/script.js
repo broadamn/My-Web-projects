@@ -136,3 +136,24 @@ deleteButtons.forEach((button) => {
       });
   });
 });
+
+function toggleAddTrainForm() {
+  const addTrainContainer = document.getElementById('add-train-container');
+  addTrainContainer.classList.toggle('open');
+  const searchTrainContainer = document.getElementById('search-train-container');
+
+  searchTrainContainer.style.marginLeft = addTrainContainer.classList.contains('open') ? '28%' : '50%';
+
+  // if (!addTrainContainer.classList.contains('open')) {
+  //   // ha epp megy ki akkor fixed lesz
+  //   addTrainContainer.style.position = 'fixed';
+  // } else {
+  //   setTimeout(() => {
+  //     // ha bejott absolute, hogy gorduljon az oldallal
+  //     addTrainContainer.style.position = 'absolute';
+  //   }, 1000);
+  // }
+}
+
+const addTrainB = document.getElementById('add-train-button');
+addTrainB.addEventListener('click', toggleAddTrainForm);
