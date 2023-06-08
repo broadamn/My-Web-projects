@@ -1,12 +1,13 @@
 import mysql from 'mysql';
+import dbConfig from '../../config/db.config.js';
 
 const pool = mysql.createPool({
-  connectionLimit: 10,
-  database: 'trains',
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'mypasswd',
+  connectionLimit: dbConfig.connectionLimit,
+  database: dbConfig.DB,
+  host: dbConfig.HOST,
+  port: dbConfig.port,
+  user: dbConfig.USER,
+  password: dbConfig.PASSWORD,
 });
 
 export function initDb() {
@@ -115,7 +116,7 @@ export function getAllJourneys() {
 
 export function getBookingsByJourneyId(id) {
   const query =
-    'SELECT reservation_id, u.user_id, week_number, u.name FROM reservation AS r JOIN user AS U on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
+    'SELECT reservation_id, u.user_id, week_number, u.name FROM reservation AS r JOIN user AS u on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
   return executeQuery(query, [id]);
 }
 

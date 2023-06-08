@@ -36,7 +36,7 @@ export function validateTrain(from, to, day, time, price, type) {
     console.log(invalidmsg);
     return false;
   }
-  const days = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+  const days = ['hetfo', 'kedd', 'szerda', 'csutortok', 'pentek', 'szombat', 'vasarnap'];
   if (!days.includes(day.toLowerCase())) {
     invalidmsg = 'Bad day was given';
     console.log(invalidmsg);

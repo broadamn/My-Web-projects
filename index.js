@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import * as path from 'path';
 import bodyParser from 'body-parser';
 import { initDb } from './public/db/db.js';
 import requestRoutes from './public/routes/requests.js';
+
+dotenv.config();
 
 const app = express();
 
@@ -25,6 +28,7 @@ initDb()
     console.error('Hiba az adatbázis létrehozásakor!', err);
   });
 
-app.listen(8080, () => {
-  console.log('Server listening on http://localhost:8080/ ...');
+const PORT = process.env.NODE_DOCKER_PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}/`);
 });
