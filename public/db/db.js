@@ -24,6 +24,7 @@ export function initDb() {
             origin VARCHAR(255) NOT NULL,
             destination VARCHAR(255) NOT NULL,
             departure_time TIME NOT NULL,
+            arrival_time TIME NOT NULL,
             day VARCHAR(20),
             price FLOAT NOT NULL,
             type VARCHAR(5) NOT NULL
@@ -39,9 +40,9 @@ export function initDb() {
         );
 
         connection.query(
-          `CREATE TABLE IF NOT EXISTS user (
-            user_id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL
+          `CREATE TABLE IF NOT EXISTS users (
+            username VARCHAR(255) NOT NULL PRIMARY KEY,
+            password VARCHAR(255) NOT NULL
           );`,
           (err2) => {
             if (err2) {
@@ -57,21 +58,38 @@ export function initDb() {
           `CREATE TABLE IF NOT EXISTS reservation (
             reservation_id INT AUTO_INCREMENT PRIMARY KEY,
             journey_id INT NOT NULL,
-            user_id INT NOT NULL,
+            username VARCHAR(255) NOT NULL,
             week_number INT,
             FOREIGN KEY (journey_id) REFERENCES journey(journey_id),
-            FOREIGN KEY (user_id) REFERENCES user(user_id)
+            FOREIGN KEY (username) REFERENCES users(username)
           );`,
-          (err3, resp) => {
+          (err3) => {
             if (err3) {
               console.error(err3);
               reject(err3);
             } else {
-              console.log('Foglalások tábla rendben!\n');
+              console.log('Foglalások tábla rendben!');
+            }
+          },
+        );
+
+        connection.query(
+          `CREATE TABLE IF NOT EXISTS admins (
+            admin_id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL
+          );`,
+          (err4, resp) => {
+            if (err4) {
+              console.error(err4);
+              reject(err4);
+            } else {
+              console.log('Adminok tábla rendben!\n');
               resolve(resp);
             }
           },
         );
+
         connection.release();
       }
     });
@@ -113,29 +131,64 @@ export function getAllJourneys() {
   const query = 'SELECT * FROM journey';
   return executeQuery(query);
 }
-
+ // foglalasok lekerese
 export function getBookingsByJourneyId(id) {
   const query =
-    'SELECT reservation_id, u.user_id, week_number, u.name FROM reservation AS r JOIN user AS u on u.user_id = r.user_id WHERE journey_id = ? ORDER BY reservation_id';
+    'SELECT reservation_id, u.username, week_number FROM reservation AS r JOIN users AS u on u.username = r.username WHERE journey_id = ? ORDER BY reservation_id';
   return executeQuery(query, [id]);
 }
 
+export function getUsersBookingsByJourneyId(params) {
+  const query =
+    'SELECT reservation_id, username, week_number FROM reservation WHERE username = ? AND journey_id = ? ORDER BY reservation_id';
+  return executeQuery(query, params);
+}
+
+
 export function insertReservation(params) {
-  const query = 'INSERT INTO RESERVATION (journey_id, user_id, week_number) VALUES (?, ?, ?)';
+  const query = 'INSERT INTO reservation (journey_id, username, week_number) VALUES (?, ?, ?)';
   return executeQuery(query, params);
 }
 
 export function insertTrain(params) {
-  const query = 'INSERT INTO journey (origin, destination, day, departure_time, price, type) values (?, ?, ?, ?, ?, ?)';
+  const query =
+    'INSERT INTO journey (origin, destination, day, departure_time, arrival_time, price, type) values (?, ?, ?, ?, ?, ?, ?)';
   return executeQuery(query, params);
 }
 
 export function getAllUsers() {
-  const query = 'SELECT * FROM user';
+  const query = 'SELECT * FROM users';
   return executeQuery(query);
 }
 
+// export function searchTrain(params) {
+//   const query = 'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ? ';
+//   return executeQuery(query, params);
+// }
+
 export function searchTrain(params) {
-  const query = 'SELECT * FROM journey WHERE origin LIKE ? AND destination LIKE ? AND price >= ? AND price <= ? ';
+  const query = `
+  Call FindTrainOptions(?, ?);
+  `;
+  return executeQuery(query, params);
+}
+
+export function insertUser(params) {
+  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+  return executeQuery(query, params);
+}
+
+export function checkIfUserExists(userName) {
+  const query = 'SELECT 1 FROM users WHERE username = ?';
+  return executeQuery(query, [userName]);
+}
+
+export function validateUserCredentials(params) {
+  const query = 'SELECT 1 as resp FROM users WHERE username = ? AND password = ?';
+  return executeQuery(query, params);
+}
+
+export function validateAdminCredentials(params) {
+  const query = 'SELECT 1 as resp FROM admins WHERE username = ? AND password = ?';
   return executeQuery(query, params);
 }

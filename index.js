@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import * as path from 'path';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { initDb } from './public/db/db.js';
 import requestRoutes from './public/routes/requests.js';
@@ -14,11 +15,12 @@ const staticdir = path.join(process.cwd(), 'public');
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), './public/views'));
 
+app.use(cookieParser());
 app.use(express.static(staticdir));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use('/', requestRoutes);
+
 
 initDb()
   .then(() => {

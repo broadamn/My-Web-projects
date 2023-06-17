@@ -16,9 +16,8 @@
             <thead>
                 <tr>
                     <th>Foglalás ID</th>
-                    <th>Felhasználó ID</th>
+                    <th>Felhasználónév</th>
                     <th>Hét sorszáma</th>
-                    <th>Név</th>
                     <th>Foglalás törlése</th>
                 </tr>
             </thead>
@@ -29,13 +28,10 @@
                             <%= booking.reservation_id %>
                         </td>
                         <td>
-                            <%= booking.user_id %>
+                            <%= booking.username %>
                         </td>
                         <td>
                             <%= booking.week_number %>
-                        </td>
-                        <td>
-                            <%= booking.name %>
                         </td>
                         <td class="delete-cell">
                             <button class="delete-button" data-reservation-id="<%= booking.reservation_id %>">Törlés</button>
@@ -51,14 +47,16 @@
                 <h1>Vonatjegy foglalás</h1>
                 <form id="form" action="/book_ticket/<%= journeyId %>" method="POST">
 
-                    <label for="user">Felhasználó</label>
-                    <select name="user" id="user">
-                        <% users.forEach((user)=> { %>
-                            <option value="<%= user.user_id %>">
-                                <%= user.name %>
-                            </option>
-                            <% }); %>
-                    </select><br>
+                    <% if(role === 'admin') { %>
+                        <label for="username">Felhasználónév</label>
+                        <select name="username" id="username">
+                            <% users.forEach((user)=> { %>
+                                <option value="<%= user.username %>">
+                                    <%= user.username %>
+                                </option>
+                                <% }); %>
+                        </select><br>
+                    <% } %>
 
                     <label for="week">Hét</label>
                     <select name="week" id="week">

@@ -1,8 +1,8 @@
 let invalidmsg = '';
 
-export function validateTime(time) {
+export function validateTime(dtime, atime) {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  if (!timeRegex.test(time)) {
+  if (!timeRegex.test(dtime) || !timeRegex.test(atime)) {
     invalidmsg = 'Bad time format!';
     console.log(invalidmsg);
     return false;
@@ -30,8 +30,8 @@ export function validateType(type) {
   return true;
 }
 
-export function validateTrain(from, to, day, time, price, type) {
-  if (from === '' || to === '' || day === '' || time === '' || price === '' || type === '') {
+export function validateTrain(from, to, day, dtime, atime, price, type) {
+  if (from === '' || to === '' || day === '' || dtime === '' || atime === '' || price === '' || type === '') {
     invalidmsg = 'Empty input field!';
     console.log(invalidmsg);
     return false;
@@ -42,7 +42,7 @@ export function validateTrain(from, to, day, time, price, type) {
     console.log(invalidmsg);
     return false;
   }
-  if (!validateType(type) || !validateTime(time) || !validatePrice(price)) return false;
+  if (!validateType(type) || !validateTime(dtime, atime) || !validatePrice(price)) return false;
 
   return true;
 }

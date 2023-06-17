@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login and Register Page</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <script>
+        function showLoginForm() {
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("register-form").style.display = "none";
+        }
+
+        function showRegisterForm() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("register-form").style.display = "block";
+        }
+
+        function hideProblemMessage() {
+            var problemElement = document.querySelector('.problem');
+            if (problemElement) {
+                setTimeout(function () {
+                    problemElement.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // meghicom mikor az oldal betoltodik
+        window.onload = hideProblemMessage;
+    </script>
+</head>
+
+<body>
+
+    <div id="login-form">
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <input type="radio" id="user" name="role" value="user" checked>
+            <label for="user">User</label><br>
+
+            <input type="radio" id="admin" name="role" value="admin">
+            <label for="admin">Admin</label><br>
+
+            <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Register</a></p>
+
+            <input type="submit" value="Login">
+        </form>
+
+    </div>
+
+    <div id="register-form" class="register-form">
+        <h1>Register</h1>
+        <form action="/register" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password1" name="password1" required><br><br>
+
+            <label for="password">Password again:</label>
+            <input type="password" id="password2" name="password2" required><br>
+
+            <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+
+            <input type="submit" value="Register">
+        </form>
+    </div>
+    <% if(typeof problem !=='undefined' ) { %>
+        <p class='problem'>
+            <%= problem %>
+        </p>
+        <% } %>
+</body>
+
+</html>

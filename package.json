@@ -6,6 +6,7 @@
     "watch": "nodemon -e . index.js"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
     "eslint": "8.37.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.8.0",
@@ -15,11 +16,16 @@
     "prettier": "2.8.7"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.5",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.1.4",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "json-watch": "^1.0.2",
+    "jsonwebtoken": "^9.0.0",
     "msnodesqlv8": "^3.1.0",
     "mssql": "^9.1.1",
     "mysql": "^2.18.1",

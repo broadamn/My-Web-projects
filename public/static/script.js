@@ -1,7 +1,8 @@
 const priceInput = document.getElementById('price');
 const from = document.getElementById('from');
 const to = document.getElementById('to');
-const time = document.getElementById('time');
+const dtime = document.getElementById('dtime');
+const atime = document.getElementById('atime');
 const submitButton = document.getElementById('submit');
 const minp = document.getElementById('min-price');
 const maxp = document.getElementById('max-price');
@@ -62,8 +63,12 @@ if (from != null && to != null) {
   to.addEventListener('input', validateSubmit);
 }
 
-if (time != null) {
-  time.addEventListener('input', validateTime);
+if (dtime != null) {
+  dtime.addEventListener('input', validateTime);
+}
+
+if (atime != null) {
+  atime.addEventListener('input', validateTime);
 }
 
 if (priceInput != null) {

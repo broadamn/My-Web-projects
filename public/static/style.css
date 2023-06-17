@@ -39,6 +39,7 @@ label {
 
 input[type="text"],
 input[type="number"],
+input[type="password"],
 select {
     background-color: #eaeaea;
     width: 460px;
@@ -138,6 +139,7 @@ table {
     border-collapse: collapse;
     margin: 0 auto;
     margin-bottom: 20px;
+    width: 800px;
 }
 
 th,
@@ -213,4 +215,13 @@ tr:nth-child(odd) {
     margin-left: 50%;
     transform: translateX(-50%);
     transition: margin-left 0.8s ease-out;
+}
+
+.register-form {
+  display: none;
+}
+
+.problem {
+    color:#c22727;
+    font-size: 20px;
 }
