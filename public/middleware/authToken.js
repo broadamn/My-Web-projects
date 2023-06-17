@@ -22,17 +22,32 @@ export function authenticateToken(req, res, next) {
   });
 }
 
-export function isAdminLoggedIn(req) {
+export function isLoggedIn(req) {
   const token = req.cookies.jwt;
 
   if (!token) {
-    return false; // User is not logged in
+    return false; // felhasznalo nincs bejelentkezve
   }
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    return decoded.role === 'admin';
+    return decoded.role;
   } catch (err) {
-    return false; // Invalid token or expired
+    return false; // invalid vagy lejart token
+  }
+}
+
+export function getUsername(req) {
+  const token = req.cookies.jwt;
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    return decoded.username;
+  } catch (err) {
+    return null;
   }
 }

@@ -68,6 +68,7 @@ input[type="submit"]:hover {
     transition: 0.2s;
 }
 
+.log_button,
 .link_button {
     text-align: center;
     font-size: 14px;
@@ -80,6 +81,7 @@ input[type="submit"]:hover {
     cursor: pointer;
 }
 
+.log_button:hover,
 .link_button:hover {
     background-color: #148db2;
     color: #fff;

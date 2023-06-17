@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import {
   deleteReservationbyId,
   getJourneyDetailsById,
@@ -11,29 +12,25 @@ import {
   searchTrain,
   insertUser,
   checkIfUserExists,
-  validateUserCredentials,
-  validateAdminCredentials,
+  getUserPassword,
+  getAdminPassword,
   getUsersBookingsByJourneyId,
   deleteJourneybyId,
 } from '../db/db.js';
-import { authenticateToken, secretKey, isAdminLoggedIn } from '../middleware/authToken.js';
+import { authenticateToken, secretKey, isLoggedIn, getUsername } from '../middleware/authToken.js';
 import { validateTrain, validateSearchData, validateId, getInvalidMessage } from '../validation/validator.js';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
   //  megnezem ha adminkent vagyok-e bejelentkezve
-  let admin;
-  if (isAdminLoggedIn(req)) {
-    admin = true;
-  } else {
-    admin = false;
-  }
+  const role = isLoggedIn(req);
+  const username = getUsername(req);
 
   // lekérem az összes vonatot az adatbázisból
   getAllJourneys()
     .then((result) => {
-      res.render('search_results.ejs', { direct: result, admin });
+      res.render('search_results.ejs', { direct: result, role, username });
     })
     .catch((error) => {
       console.error(error);
@@ -121,8 +118,10 @@ router.get('/search_train', (req, res) => {
       const direct = result[0];
       const oneTransfer = result[1];
       const twoTransfer = result[2];
-      console.log(oneTransfer);
-      res.render('search_results.ejs', { direct, oneTransfer, twoTransfer });
+
+      const role = isLoggedIn(req);
+      const username = getUsername(req);
+      res.render('search_results.ejs', { direct, oneTransfer, twoTransfer, role, username });
     })
     .catch((error) => {
       console.error(error);
@@ -160,14 +159,14 @@ router.post('/book_ticket/:journey_id', authenticateToken, (req, res) => {
 // foglalasok megtekintese egy jaratra
 router.get('/booking_list/:journey_id', authenticateToken, (req, res) => {
   const journeyId = req.params.journey_id;
-  const { role } = req.user;
+  const { role, username } = req.user;
 
   switch (role) {
     case 'admin':
       getBookingsByJourneyId(journeyId)
         .then((results) => {
           getAllUsers().then((users) => {
-            res.render('booking_list.ejs', { journeyId, results, users, role });
+            res.render('booking_list.ejs', { journeyId, results, users, role, username });
           });
         })
         .catch((error) => {
@@ -177,7 +176,7 @@ router.get('/booking_list/:journey_id', authenticateToken, (req, res) => {
     case 'user':
       getUsersBookingsByJourneyId([req.user.username, journeyId])
         .then((results) => {
-          res.render('booking_list.ejs', { journeyId, results, role });
+          res.render('booking_list.ejs', { journeyId, results, role, username });
         })
         .catch((error) => {
           console.error(error);
@@ -225,14 +224,14 @@ router.post('/login', async (req, res) => {
     let validCredentials = false;
 
     if (role === 'user') {
-      const response = await validateUserCredentials([username, password]);
-      if (response[0].resp === 1) {
-        validCredentials = true;
+      const response = await getUserPassword([username]);
+      if (response[0].password !== 0) {
+        validCredentials = await bcrypt.compare(password, response[0].password);
       }
     } else if (role === 'admin') {
-      const response = await validateAdminCredentials([username, password]);
-      if (response[0].resp === 1) {
-        validCredentials = true;
+      const response = await getAdminPassword([username]);
+      if (response[0].password !== 0) {
+        validCredentials = await bcrypt.compare(password, response[0].password);
       }
     }
 
@@ -257,7 +256,7 @@ router.post('/register', (req, res) => {
   const { username } = req.body;
   const { password1 } = req.body;
   const { password2 } = req.body;
-  checkIfUserExists(username).then((response) => {
+  checkIfUserExists(username).then(async (response) => {
     if (response[0]) {
       // megnezem hogy letezik-e mar az adott fehasznalo
       res.render('login.ejs', { problem: `${username} nevű felhasználó már létezik!` });
@@ -265,7 +264,8 @@ router.post('/register', (req, res) => {
     else if (password1 !== password2) {
       res.render('login.ejs', { problem: 'Kérem ugyanazt a jelszót adja meg' });
     } else {
-      insertUser([username, password1])
+      const hashedPassword = await bcrypt.hash(password1, 10);
+      insertUser([username, hashedPassword])
         .then(() => {
           res.redirect('/loginpage');
         })

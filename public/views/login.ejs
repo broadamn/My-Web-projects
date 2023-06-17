@@ -4,6 +4,7 @@
 <head>
     <title>Belépés</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="../pictures/favicon.png" />
 
     <script>
         function showLoginForm() {
@@ -25,6 +26,17 @@
             }
         }
 
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            var showPasswordCheckbox = document.getElementById("showPasswordToggle");
+    
+            if (showPasswordCheckbox.checked) {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+
         // meghivom mikor az oldal betoltodik
         window.onload = hideProblemMessage;
     </script>
@@ -36,11 +48,11 @@
         <h1>Bejelentkezés</h1>
         <form action="/login" method="POST">
             <label for="username">Felhasználónév:</label>
-            <input type="text" id="username" name="username" required><br>
+            <input type="text" id="username1" name="username" required><br>
 
             <label for="password">Jelszó:</label>
             <input type="password" id="password" name="password" required><br>
-            <input type="checkbox" id="showPasswordToggle">
+            <input type="checkbox" id="showPasswordToggle" onchange="togglePasswordVisibility()">
             <label for="showPasswordToggle">jelszó megjelenítése</label><br><br>
 
             <input type="radio" id="user" name="role" value="user" checked>
@@ -60,7 +72,7 @@
         <h1>Regisztráció</h1>
         <form action="/register" method="POST">
             <label for="username">Felhasználónév:</label>
-            <input type="text" id="username" name="username" required><br><br>
+            <input type="text" id="username2" name="username" required><br><br>
 
             <label for="password">Jelszó:</label>
             <input type="password" id="password1" name="password1" required><br><br>
