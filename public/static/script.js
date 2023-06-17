@@ -87,38 +87,45 @@ if (id != null) {
 }
 
 const journeyRows = document.querySelectorAll('.journey-row');
+
+function rowClickHandler() {
+  const row = this;
+  const cellCount = row.children.length; // colspanhez
+  const { journeyId } = row.dataset;
+  const additionalInfoRow = row.nextElementSibling;
+  const additionalInfoCell = additionalInfoRow.querySelector('.additional-info-cell');
+  additionalInfoCell.setAttribute('colspan', cellCount); // colspanelek additional infohoz
+
+  if (additionalInfoRow.classList.contains('hidden')) {
+    additionalInfoRow.classList.add('visible');
+    additionalInfoRow.classList.remove('hidden');
+
+    fetch(`/journey_details/${journeyId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const { price, type } = data;
+        additionalInfoCell.textContent = `Jegy ára: ${price} Vonat típusa: ${type}`;
+      })
+      .catch((error) => {
+        console.log('Hiba történt a járat információinak listázása során.');
+        console.error(error);
+      });
+  } else {
+    additionalInfoRow.classList.add('hidden');
+    additionalInfoRow.classList.remove('visible');
+    setTimeout(() => {
+      additionalInfoCell.textContent = null;
+    }, 500);
+  }
+}
+
+// minden sorhoz hozzaadom az event listenert
 journeyRows.forEach((row) => {
-  row.addEventListener('click', () => {
-    const { journeyId } = row.dataset;
-    const additionalInfoRow = row.nextElementSibling;
-    const additionalInfoCell = additionalInfoRow.querySelector('.additional-info-cell');
-
-    if (additionalInfoRow.classList.contains('hidden')) {
-      additionalInfoRow.classList.add('visible');
-      additionalInfoRow.classList.remove('hidden');
-
-      fetch(`/journey_details/${journeyId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          const { price, type } = data;
-          additionalInfoCell.textContent = `Jegy ára: ${price} Vonat típusa: ${type}`;
-        })
-        .catch((error) => {
-          console.error(error);
-          alert('Hiba történt a a járat információinak listázása során.');
-        });
-    } else {
-      additionalInfoRow.classList.add('hidden');
-      additionalInfoRow.classList.remove('visible');
-      setTimeout(() => {
-        additionalInfoCell.textContent = null;
-      }, 500);
-    }
-  });
+  row.addEventListener('click', rowClickHandler);
 });
 
-const deleteButtons = document.querySelectorAll('.delete-button');
-deleteButtons.forEach((button) => {
+const deleteReservationButtons = document.querySelectorAll('.delete-res-button');
+deleteReservationButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const { reservationId } = button.dataset;
     const reservationRow = button.parentElement.parentElement;
@@ -138,6 +145,38 @@ deleteButtons.forEach((button) => {
       .catch((error) => {
         console.error(error);
         alert('Hiba történt a foglalás törlése során.');
+      });
+  });
+});
+
+const deleteJourneyButtons = document.querySelectorAll('.delete-journey-button');
+deleteJourneyButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const { journeyId } = button.dataset;
+    const journeyRow = button.parentElement.parentElement;
+    const additionalInfoRow = journeyRow.nextElementSibling;
+    const additionalInfoCell = additionalInfoRow.querySelector('.additional-info-cell');
+
+    fetch(`/delete_journey/${journeyId}`, { method: 'DELETE' })
+      .then((response) => {
+        if (response.ok) {
+          journeyRow.classList.add('hidden');
+          additionalInfoRow.classList.add('hidden');
+          additionalInfoRow.classList.remove('visible');
+          setTimeout(() => {
+            additionalInfoCell.textContent = null;
+          }, 500);
+          setTimeout(() => {
+            journeyRow.remove();
+            alert('Járat sikeresen törölve!');
+          }, 500);
+        } else {
+          alert('Hiba történt a járat törlése során.');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Hiba történt a járat törlése során.');
       });
   });
 });

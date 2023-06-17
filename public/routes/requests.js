@@ -14,6 +14,7 @@ import {
   validateUserCredentials,
   validateAdminCredentials,
   getUsersBookingsByJourneyId,
+  deleteJourneybyId,
 } from '../db/db.js';
 import { authenticateToken, secretKey, isAdminLoggedIn } from '../middleware/authToken.js';
 import { validateTrain, validateSearchData, validateId, getInvalidMessage } from '../validation/validator.js';
@@ -73,6 +74,24 @@ router.post('/add_train', authenticateToken, (req, res) => {
     .catch((errmsg) => {
       console.error(errmsg);
       res.render('error.ejs', { message: 'Hiba a vonat hozzáadásakor!', problem: `${errmsg}` });
+    });
+});
+
+router.delete('/delete_journey/:journeyId', authenticateToken, (req, res) => {
+  if (req.user.role !== 'admin') {
+    res.status(401);
+    res.render('login.ejs', { problem: 'A folytatáshoz admin jog szügséges!' });
+    return;
+  }
+  const { journeyId } = req.params;
+
+  deleteJourneybyId(journeyId)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
 });
 

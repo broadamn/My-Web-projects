@@ -77,9 +77,14 @@
                     <td>
                       <a href="/booking_list/<%= journey.journey_id %>">Foglalások megtekintése</a>
                     </td>
+                    <% if(admin) { %>
+                    <td class="delete-cell">
+                        <button class="delete-journey-button" data-journey-id="<%= journey.journey_id %>">Törlés</button>
+                    </td>
+                    <% } %>
                   </tr>
                   <tr class="hidden">
-                    <td colspan="7" class="additional-info-cell removed"></td>
+                    <td class="additional-info-cell removed"></td>
                   </tr>
                   <% });%>
 

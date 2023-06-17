@@ -85,7 +85,8 @@ input[type="submit"]:hover {
     color: #fff;
 }
 
-.delete-button {
+.delete-res-button,
+.delete-journey-button {
     text-align: center;
     font-size: 14px;
     background-color: #c22727;
@@ -98,7 +99,8 @@ input[type="submit"]:hover {
     cursor: pointer;
 }
 
-.delete-button:hover {
+.delete-res-button:hover,
+.delete-journey-button:hover {
     background-color: #ff0101;
     color: #fff;
     box-shadow: 0 0 10px rgba(252, 252, 252, 0.836);

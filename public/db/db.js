@@ -60,7 +60,7 @@ export function initDb() {
             journey_id INT NOT NULL,
             username VARCHAR(255) NOT NULL,
             week_number INT,
-            FOREIGN KEY (journey_id) REFERENCES journey(journey_id),
+            FOREIGN KEY (journey_id) REFERENCES journey(journey_id) ON DELETE CASCADE,
             FOREIGN KEY (username) REFERENCES users(username)
           );`,
           (err3) => {
@@ -119,6 +119,11 @@ export function executeQuery(query, params) {
 
 export function deleteReservationbyId(id) {
   const query = 'DELETE FROM reservation WHERE reservation_id = ?';
+  return executeQuery(query, [id]);
+}
+
+export function deleteJourneybyId(id) {
+  const query = 'DELETE FROM journey WHERE journey_id = ?';
   return executeQuery(query, [id]);
 }
 
