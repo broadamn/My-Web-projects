@@ -131,7 +131,7 @@ export function getAllJourneys() {
   const query = 'SELECT * FROM journey';
   return executeQuery(query);
 }
- // foglalasok lekerese
+// foglalasok lekerese
 export function getBookingsByJourneyId(id) {
   const query =
     'SELECT reservation_id, u.username, week_number FROM reservation AS r JOIN users AS u on u.username = r.username WHERE journey_id = ? ORDER BY reservation_id';
@@ -143,7 +143,6 @@ export function getUsersBookingsByJourneyId(params) {
     'SELECT reservation_id, username, week_number FROM reservation WHERE username = ? AND journey_id = ? ORDER BY reservation_id';
   return executeQuery(query, params);
 }
-
 
 export function insertReservation(params) {
   const query = 'INSERT INTO reservation (journey_id, username, week_number) VALUES (?, ?, ?)';

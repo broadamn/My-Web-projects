@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/', requestRoutes);
 
-
 initDb()
   .then(() => {
     console.log('Adatbázis sikeresen létrehozva!');
