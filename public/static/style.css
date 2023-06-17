@@ -33,7 +33,7 @@ form {
 }
 
 label {
-    display: block;
+    display: inline-block;
     margin: 7px;
 }
 
@@ -42,7 +42,7 @@ input[type="number"],
 input[type="password"],
 select {
     background-color: #eaeaea;
-    width: 460px;
+    width: 440px;
     padding: 10px;
     border: none;
     border-radius: 5px;

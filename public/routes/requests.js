@@ -219,6 +219,7 @@ router.post('/login', async (req, res) => {
 
     if (!validCredentials) {
       res.render('login.ejs', { problem: 'Hibás felhasználónév vagy jelszó' });
+      return;
     }
 
     const token = jwt.sign({ username, role }, secretKey, { expiresIn: '1h' });

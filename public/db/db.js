@@ -183,11 +183,11 @@ export function checkIfUserExists(userName) {
 }
 
 export function validateUserCredentials(params) {
-  const query = 'SELECT 1 as resp FROM users WHERE username = ? AND password = ?';
+  const query = 'SELECT IFNULL((SELECT 1 FROM users WHERE username = ? AND password = ?), 0) AS resp';
   return executeQuery(query, params);
 }
 
 export function validateAdminCredentials(params) {
-  const query = 'SELECT 1 as resp FROM admins WHERE username = ? AND password = ?';
+  const query = 'SELECT IFNULL((SELECT 1 FROM admins WHERE username = ? AND password = ?), 0) AS resp';
   return executeQuery(query, params);
 }

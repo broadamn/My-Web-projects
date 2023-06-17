@@ -161,4 +161,6 @@ function toggleAddTrainForm() {
 }
 
 const addTrainB = document.getElementById('add-train-button');
-addTrainB.addEventListener('click', toggleAddTrainForm);
+if (addTrainB !== null) {
+  addTrainB.addEventListener('click', toggleAddTrainForm);
+}
