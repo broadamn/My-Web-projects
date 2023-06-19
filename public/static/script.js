@@ -139,6 +139,7 @@ deleteReservationButtons.forEach((button) => {
             alert('Foglalás sikeresen törölve!');
           }, 500);
         } else {
+          console.log(response);
           alert('Hiba történt a foglalás törlése során.');
         }
       })

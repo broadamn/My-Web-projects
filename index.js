@@ -4,7 +4,10 @@ import * as path from 'path';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { initDb } from './public/db/db.js';
-import requestRoutes from './public/routes/requests.js';
+import trainRoutes from './public/routes/trainRoutes.js';
+import searchRoutes from './public/routes/searchRoutes.js';
+import bookingRoutes from './public/routes/bookingRoutes.js';
+import authRoutes from './public/routes/authRoutes.js';
 
 dotenv.config();
 
@@ -19,7 +22,10 @@ app.use(cookieParser());
 app.use(express.static(staticdir));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/', requestRoutes);
+app.use('/', trainRoutes);
+app.use('/', searchRoutes);
+app.use('/', bookingRoutes);
+app.use('/', authRoutes);
 
 initDb()
   .then(() => {
