@@ -39,7 +39,6 @@ label {
 
 input[type="text"],
 input[type="number"],
-input[type="password"],
 select {
     background-color: #eaeaea;
     width: 440px;
@@ -85,6 +84,7 @@ input[type="submit"]:hover {
 .link_button:hover {
     background-color: #148db2;
     color: #fff;
+    transform: scale(0.85);
 }
 
 .delete-res-button,
@@ -106,6 +106,7 @@ input[type="submit"]:hover {
     background-color: #ff0101;
     color: #fff;
     box-shadow: 0 0 10px rgba(252, 252, 252, 0.836);
+    transform: scale(0.9);
 }
 
 .delete-cell {
@@ -135,6 +136,7 @@ a:hover {
     color: #38acd3;
     text-shadow:
         2px 2px 0 #02506a;
+    transform: scale(0.9);
 }
 
 
@@ -182,14 +184,14 @@ tr:nth-child(odd) {
     transition: 0.5s;
 }
 
-.hidden>.additional-info-cell {
+.hidden > .additional-info-cell {
     height: 0px;
     padding: 0px;
     margin: 0px;
     transition: height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
 }
 
-.visible>.additional-info-cell {
+.visible > .additional-info-cell {
     height: auto;
     padding: auto;
     margin: auto;
@@ -225,7 +227,48 @@ tr:nth-child(odd) {
   display: none;
 }
 
+.input_div {
+    background: #eaeaea;
+    width: 80%;
+    height: 26px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 15px auto;
+    display: flex;
+    align-items: center;
+}
+
+.input_div > input {
+    background: #eaeaea;
+    width: 100%;
+    padding: 10px, 0;
+    border: 0;
+    outline: 0;
+    font-size: 18px;
+
+}
+
+.input_div > img {
+    width: 27px;
+    cursor: pointer;
+}
+
 .problem {
     color:#c22727;
     font-size: 20px;
+}
+
+.switchlink {
+    background: right / 0% 100% no-repeat
+        linear-gradient(#c1f5ee, #c1f5ee);
+    transition: background-size 500ms;
+    color:rgb(7, 7, 7);
+}
+
+.switchlink:hover {
+    background: left / 100% 100% no-repeat
+        linear-gradient(#c1f5ee, #c1f5ee);
+    cursor: pointer;
+    color:rgb(7, 7, 7);
+    text-shadow: none;
 }
