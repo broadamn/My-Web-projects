@@ -172,7 +172,7 @@ export function getAllUsers() {
 
 export function searchTrain(params) {
   const query = `
-  Call FindTrainOptions(?, ?);
+  Call FindTrainOptions(?, ?, ?, ?);
   `;
   return executeQuery(query, params);
 }

@@ -108,7 +108,7 @@ router.get('/search_train', (req, res) => {
   if (minprice === '') minprice = 0;
   else minprice = parseInt(minprice, 10);
 
-  if (maxprice === '') maxprice = Number.MAX_VALUE;
+  if (maxprice === '') maxprice = 2147483647;
   else maxprice = parseInt(maxprice, 10);
 
   const searchTrainParams = [from, to, minprice, maxprice];

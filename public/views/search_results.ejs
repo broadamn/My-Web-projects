@@ -91,21 +91,21 @@
                   </tr>
                   <% });%>
 
-                    <% } if(typeof oneTransfer !=='undefined' && oneTransfer.length> 0 ) { %>
-                      <thead>
-                        <tr>
-                          <th colspan="7" style="text-align: center;">Egy atszalas</th>
-                        </tr>
-                        <tr>
-                          <th>Indulópont</th>
-                          <th>Átszállás</th>
-                          <th>Átszállás időpontja</th>
-                          <th>Célállomás</th>
-                          <th>Indulás időpontja</th>
-                          <th>Érkezés időpontja</th>
-                          <th>Összár</th>
-                        </tr>
-                      </thead>
+              <% } if(typeof oneTransfer !=='undefined' && oneTransfer.length> 0 ) { %>
+                  <thead>
+                    <tr>
+                      <th colspan="7" style="text-align: center;">Egy atszalas</th>
+                    </tr>
+                    <tr>
+                      <th>Indulópont</th>
+                      <th>Átszállás</th>
+                      <th>Átszállás időpontja</th>
+                      <th>Célállomás</th>
+                      <th>Indulás időpontja</th>
+                      <th>Érkezés időpontja</th>
+                      <th>Összár</th>
+                    </tr>
+                  </thead>
               <tbody>
                 <% oneTransfer.forEach((journey)=> { %>
                   <tr>
@@ -132,9 +132,52 @@
                     </td>
                   </tr>
                   <% });%>
-                    <% } %>
-              </tbody>
-          </table>
+
+                  <% } if(typeof twoTransfer !=='undefined' && twoTransfer.length> 0 ) { %>
+                    <thead>
+                      <tr>
+                        <th colspan="7" style="text-align: center;">Két átszállás</th>
+                      </tr>
+                      <tr>
+                        <th>Indulópont</th>
+                        <th>1. átszállás</th>
+                        <th>2. átszállás</th>
+                        <th>Célállomás</th>
+                        <th>Indulás időpontja</th>
+                        <th>Érkezés időpontja</th>
+                        <th>Összár</th>
+                      </tr>
+                    </thead>
+                <tbody>
+                  <% twoTransfer.forEach((journey)=> { %>
+                    <tr>
+                      <td>
+                        <%= journey.origin %>
+                      </td>
+                      <td>
+                        <%= journey.dest1 %>
+                      </td>
+                      <td>
+                        <%= journey.dest2 %>
+                      </td>
+                      <td>
+                        <%= journey.dest3 %>
+                      </td>
+                      <td>
+                        <%= journey.dtime %>
+                      </td>
+                      <td>
+                        <%= journey.atime %>
+                      </td>
+                      <td>
+                        <%= journey.price %>
+                      </td>
+                    </tr>
+                    <% });%>
+                      <% } %>
+                </tbody>
+            </table>
+
           <% } else { %>
             <h1>Nincs a megadott paramétereknek megfelelő vonatjárat!</h1>
             <% } %>
