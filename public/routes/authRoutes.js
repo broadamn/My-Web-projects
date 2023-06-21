@@ -106,8 +106,9 @@ router.post('/resetpassword', authenticateToken, validatePasswords, async (req, 
   }
 });
 
-router.get('/resetpasswordpage', (req, res) => {
-  res.render('resetpasswd.ejs');
+router.get('/resetpasswordpage', authenticateToken, (req, res) => {
+  const username = getUsername(req);
+  res.render('resetpasswd.ejs', { username });
 });
 
 router.get('/logout', (req, res) => {
