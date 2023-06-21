@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Jelszó megváltoztatása</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="../pictures/favicon.png" />
+</head>
+
+<body>
+
+    <h1>Jelszó megváltoztatása</h1>
+    <form action="/resetpassword" method="POST">
+        <div class="input_div">
+            <input type="password" id="password" name="oldpassword" placeholder="Régi jelszó" required><br>
+            <img src="../pictures/eye-close.png" alt="eye" id="eyeicon1">
+        </div>
+
+        <div class="input_div">
+            <input type="password" id="password1" name="newpassword1" placeholder="Új elszó" required><br>
+            <img src="../pictures/eye-close.png" alt="eye" id="eyeicon2">
+        </div>
+
+        <div class="input_div">
+            <input type="password" id="password2" name="newpassword2" placeholder="Új jelszó újra" required><br>
+            <img src="../pictures/eye-close.png" alt="eye" id="eyeicon3">
+        </div>
+
+        <input type="submit" value="Jelszó megváltoztatása">
+    </form>
+
+    <a href='/'><button class="link_button">Mégse</button></a>
+
+    <% if(typeof problem !=='undefined' ) { %>
+        <p class='problem'>
+            <%= problem %>
+        </p>
+    <% } %>
+
+    <script src="../static/loginscript.js"></script>
+
+</body>
+
+</html>

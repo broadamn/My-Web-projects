@@ -191,7 +191,7 @@ export function getAllUsers() {
 
 export function searchTrain(params) {
   const query = `
-  Call FindTrainOptions(?, ?, ?, ?, ?);
+  Call FindTrainOptions(?, ?, ?, ?, ?, ?);
   `;
   return executeQuery(query, params);
 }
@@ -213,5 +213,15 @@ export function getUserPassword(params) {
 
 export function getAdminPassword(params) {
   const query = 'SELECT IFNULL((SELECT password FROM admins WHERE username = ?), 0) AS password';
+  return executeQuery(query, params);
+}
+
+export function updatePassword(params, role) {
+  let query;
+  if (role === 'admin') {
+    query = 'UPDATE admins SET password = ? WHERE username = ?';
+  } else {
+    query = 'UPDATE users SET password = ? WHERE username = ?';
+  }
   return executeQuery(query, params);
 }

@@ -9,7 +9,15 @@
 </head>
 
 <body>
-    <p style="color:antiquewhite;"><%= username %>  <a href='/logout'><button id="logoutB" class="log_button">Kijelentkezés</button></a></p>
+            
+    <div class="dropdown">
+        <button class="log_button"><%= username %></button>
+        <div class="dropdown-options">
+          <a href="/resetpasswordpage">Jelszó megváltoztatása</a>
+          <hr>
+          <a href='/logout'>Kijelentkezés</a>
+        </div>
+    </div>
 
     <h1>Foglalások a(z) <%= journeyId %>. számú járatra</h1>
 

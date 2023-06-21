@@ -271,3 +271,36 @@ tr:nth-child(odd) {
     color: rgb(0, 0, 0);
     text-shadow: none;
 }
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    background-color: #eaeaead9;
+    padding: 15px;
+    overflow: auto;
+    border-radius: 4px;
+    z-index: 2;
+    width: 110px;
+}
+
+.dropdown-options > a {
+    color:rgba(0, 0, 0, 0.866);
+    font-size: 14px;
+}
+
+.dropdown-options > a:hover {
+    transition: scale(1.1);
+    text-shadow: none;
+    text-shadow:
+        1px 0px 0 #00030482;
+    font-size: 15px;
+}
+  
+.dropdown:hover .dropdown-options {
+    display: block;
+}

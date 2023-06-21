@@ -68,15 +68,24 @@ export function validateTrain(from, to, day, dtime, atime, price, type) {
   return true;
 }
 
-export function validateSearchData(from, to, minprice, maxprice, type) {
-  if (!validatePrice(minprice) || !validatePrice(maxprice) || !validateType(type)) return false;
+export function validateSearchData(from, to, minprice, maxprice, type, day) {
+  if (!validatePrice(minprice) || !validatePrice(maxprice) || !validateType(type) || day === '') return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);
+
   if (maxp < minp) {
     invalidmsg = 'Minimum price should be lower than maximum price!';
     console.log(invalidmsg);
     return false;
   }
+
+  const days = ['hetfo', 'kedd', 'szerda', 'csutortok', 'pentek', 'szombat', 'vasarnap', 'any'];
+  if (!days.includes(day.toLowerCase())) {
+    invalidmsg = 'Bad day was given';
+    console.log(invalidmsg);
+    return false;
+  }
+
   return true;
 }
 

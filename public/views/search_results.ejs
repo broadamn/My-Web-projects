@@ -9,32 +9,52 @@
 </head>
 
 <body>
-  <% if(role === false){ %>
-  <a href='/loginpage'><button id="loginB" class="log_button">Bejelentkezés</button></a>
-  <% } else { %>
-  <p style="color:antiquewhite;"><%= username %>  <a href='/logout'><button id="logoutB" class="log_button">Kijelentkezés</button></a></p>
-  <% } %>
 
   <div class="search-train-container" id="search-train-container">
+    <% if(role === false){ %>
+      <a href='/loginpage'><button id="loginB" class="log_button">Bejelentkezés</button></a>
+      <% } else { %>
+        <div class="dropdown">
+          <button class="log_button"><%= username %></button>
+          <div class="dropdown-options">
+            <a href="/resetpasswordpage">Jelszó megváltoztatása</a>
+            <hr>
+            <a href='/logout'>Kijelentkezés</a>
+          </div>
+        </div>
+      <% } %>
+
     <h1>Vonatjáratok keresése</h1>
     <form id="search-form" action="/search_train" method="GET">
       <label for="from">Honnan:</label>
-      <input type="text" id="from" name="from"><br>
+      <input type="text" id="from" name="from">
 
       <label for="to">Hova:</label>
-      <input type="text" id="to" name="to"><br>
+      <input type="text" id="to" name="to">
 
       <label for="min-price">Minimális ár:</label>
-      <input type="number" id="min-price" name="minprice" min="0"><br>
+      <input type="number" id="min-price" name="minprice" min="0">
 
       <label for="max-price">Maximális ár:</label>
-      <input type="number" id="max-price" name="maxprice" min="0"><br>
+      <input type="number" id="max-price" name="maxprice" min="0">
 
       <label for="type">Vonat típusa:</label>
       <select id="type" name="type" required>
         <option value="any">Regio / Inter regio</option>
         <option value="r">Regio</option>
         <option value="ir">Inter Regio</option>
+      </select>
+
+      <label for="day">A hét melyik napján:</label>
+      <select id="day" name="day">
+        <option value="any">Összes</option>
+        <option value="hetfo">Hétfő</option>
+        <option value="kedd">Kedd</option>
+        <option value="szerda">Szerda</option>
+        <option value="csutortok">Csütörtök</option>
+        <option value="pentek">Péntek</option>
+        <option value="szombat">Szombat</option>
+        <option value="vasarnap">Vasárnap</option>
       </select><br>
 
       <input type="submit" id="submit" value="Járatok keresése"><br>

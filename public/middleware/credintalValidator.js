@@ -34,3 +34,24 @@ export function validateRegistrationData(req, res, next) {
     next();
   }
 }
+
+export function validatePasswords(req, res, next) {
+  const { oldpassword, newpassword1, newpassword2 } = req.body;
+
+  const schema = Joi.object({
+    oldpassword: Joi.string().required(),
+    newpassword1: Joi.string().required(),
+    newpassword2: Joi.string().valid(Joi.ref('newpassword1')).required().messages({
+      'any.only': 'A két jelszó nem egyezik!',
+    }),
+  });
+
+  const { error } = schema.validate({ oldpassword, newpassword1, newpassword2 });
+
+  if (error) {
+    const errorMessage = error.details[0].message;
+    res.status(400).render('resetpasswd.ejs', { problem: errorMessage });
+  } else {
+    next();
+  }
+}

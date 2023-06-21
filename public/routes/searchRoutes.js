@@ -21,9 +21,9 @@ router.get('/', (req, res) => {
 
 router.get('/search_train', (req, res) => {
   let { from, to, minprice, maxprice } = req.query;
-  const { type } = req.query;
+  const { type, day } = req.query;
 
-  if (validateSearchData(from, to, minprice, maxprice, type) === false) {
+  if (validateSearchData(from, to, minprice, maxprice, type, day) === false) {
     res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${getInvalidMessage()}` });
     return;
   }
@@ -34,7 +34,7 @@ router.get('/search_train', (req, res) => {
   minprice = minprice === '' || typeof minprice === 'undefined' ? 0 : parseInt(minprice, 10);
   maxprice = maxprice === '' || typeof maxprice === 'undefined' ? 2147483647 : parseInt(maxprice, 10);
 
-  const searchTrainParams = [from, to, minprice, maxprice, type];
+  const searchTrainParams = [from, to, minprice, maxprice, type, day];
 
   searchTrain(searchTrainParams)
     .then((result) => {
