@@ -1,20 +1,37 @@
+import Joi from 'joi';
+
 let invalidmsg = '';
 
 export function validateTime(dtime, atime) {
-  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  if (!timeRegex.test(dtime) || !timeRegex.test(atime)) {
-    invalidmsg = 'Bad time format!';
-    console.log(invalidmsg);
+  const timeSchema = Joi.string()
+    .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'Bad time format!',
+      'any.required': 'Time is required!',
+    });
+
+  const dtimeValidation = timeSchema.validate(dtime);
+  const atimeValidation = timeSchema.validate(atime);
+
+  if (dtimeValidation.error || atimeValidation.error) {
+    const errorMessage = dtimeValidation.error
+      ? dtimeValidation.error.details[0].message
+      : atimeValidation.error.details[0].message;
+    console.log(errorMessage);
     return false;
   }
   return true;
 }
 
 export function validatePrice(price) {
-  const numregex = /^\d+$/;
+  const priceSchema = Joi.string().regex(/^\d+$/).allow('').messages({
+    'string.pattern.base': 'Price should be a positive number!',
+  });
 
-  if (price !== '' && !numregex.test(price)) {
-    invalidmsg = 'Price should be a positive number!';
+  const { error } = priceSchema.validate(price);
+  if (error) {
+    invalidmsg = error.details[0].message;
     console.log(invalidmsg);
     return false;
   }
@@ -22,11 +39,15 @@ export function validatePrice(price) {
 }
 
 export function validateType(type) {
-  if (type !== 'ir' && type !== 'r') {
-    invalidmsg = 'Bad type was given';
-    console.log(invalidmsg);
+  const schema = Joi.string().valid('ir', 'r', 'any');
+  const { error } = schema.validate(type);
+
+  if (error) {
+    const invalidMsg = 'Bad type was given';
+    console.log(invalidMsg);
     return false;
   }
+
   return true;
 }
 
@@ -47,8 +68,8 @@ export function validateTrain(from, to, day, dtime, atime, price, type) {
   return true;
 }
 
-export function validateSearchData(from, to, minprice, maxprice) {
-  if (!validatePrice(minprice) || !validatePrice(maxprice)) return false;
+export function validateSearchData(from, to, minprice, maxprice, type) {
+  if (!validatePrice(minprice) || !validatePrice(maxprice) || !validateType(type)) return false;
   const maxp = parseInt(maxprice, 10);
   const minp = parseInt(minprice, 10);
   if (maxp < minp) {

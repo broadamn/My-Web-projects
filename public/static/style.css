@@ -44,7 +44,7 @@ select {
     width: 440px;
     padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     display: block;
     margin: 0 auto;
 }
@@ -54,7 +54,7 @@ input[type="submit"] {
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     box-shadow: 0 0 5px rgba(252, 252, 252, 0.804);
     display: block;
@@ -64,6 +64,7 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #0079c4;
     box-shadow: 0 0 15px rgba(254, 254, 254, 0.915);
+    transform: scale(0.9);
     transition: 0.2s;
 }
 
@@ -184,14 +185,14 @@ tr:nth-child(odd) {
     transition: 0.5s;
 }
 
-.hidden > .additional-info-cell {
+.hidden>.additional-info-cell {
     height: 0px;
     padding: 0px;
     margin: 0px;
     transition: height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
 }
 
-.visible > .additional-info-cell {
+.visible>.additional-info-cell {
     height: auto;
     padding: auto;
     margin: auto;
@@ -224,16 +225,16 @@ tr:nth-child(odd) {
 }
 
 .register-form {
-  display: none;
+    display: none;
 }
 
 .input_div {
     background: #eaeaea;
     width: 80%;
     height: 26px;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin: 15px auto;
+    border-radius: 6px;
+    padding: 10px 10px;
+    margin: 20px auto;
     display: flex;
     align-items: center;
 }
@@ -241,7 +242,7 @@ tr:nth-child(odd) {
 .input_div > input {
     background: #eaeaea;
     width: 100%;
-    padding: 10px, 0;
+    padding: 10px;
     border: 0;
     outline: 0;
     font-size: 18px;
@@ -249,26 +250,24 @@ tr:nth-child(odd) {
 }
 
 .input_div > img {
-    width: 27px;
+    width: 25px;
     cursor: pointer;
 }
 
 .problem {
-    color:#c22727;
-    font-size: 20px;
+    color: #c22727;
+    font-size: 18px;
 }
 
 .switchlink {
-    background: right / 0% 100% no-repeat
-        linear-gradient(#c1f5ee, #c1f5ee);
+    background: right / 0% 100% no-repeat linear-gradient(#c1f5ee, #c1f5ee);
     transition: background-size 500ms;
-    color:rgb(7, 7, 7);
+    color: rgb(0, 0, 0);
 }
 
 .switchlink:hover {
-    background: left / 100% 100% no-repeat
-        linear-gradient(#c1f5ee, #c1f5ee);
+    background: left / 100% 100% no-repeat linear-gradient(#c1f5ee, #c1f5ee);
     cursor: pointer;
-    color:rgb(7, 7, 7);
+    color: rgb(0, 0, 0);
     text-shadow: none;
 }

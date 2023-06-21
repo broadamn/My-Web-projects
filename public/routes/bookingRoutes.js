@@ -6,7 +6,7 @@ import {
   getUsersBookingsByJourneyId,
   getAllUsers,
 } from '../db/db.js';
-import { authenticateToken } from '../middleware/authToken.js';
+import { authenticateToken, checkOwner } from '../middleware/authMiddleware.js';
 import { validateId, getInvalidMessage } from '../validation/validator.js';
 
 const router = express.Router();
@@ -49,7 +49,7 @@ router.post('/book_ticket/:journey_id', authenticateToken, (req, res) => {
   const { role } = req.user;
 
   let username;
-
+  // ha sima user akkor csak a sajat neveben foglalhat
   if (role === 'admin') {
     username = req.body.username;
   } else {
@@ -71,7 +71,7 @@ router.post('/book_ticket/:journey_id', authenticateToken, (req, res) => {
     });
 });
 
-router.delete('/delete_reservation/:reservationId', authenticateToken, (req, res) => {
+router.delete('/delete_reservation/:reservationId', authenticateToken, checkOwner, (req, res) => {
   const { reservationId } = req.params;
 
   deleteReservationbyId(reservationId)
@@ -80,7 +80,7 @@ router.delete('/delete_reservation/:reservationId', authenticateToken, (req, res
     })
     .catch((error) => {
       console.error(error);
-      res.sendStatus(500);
+      res.status(500).render('error.ejs', { message: 'Server Error', problem: error });
     });
 });
 

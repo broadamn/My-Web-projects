@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import dbConfig from '../../config/db.config.js';
+import { createProcQuery, dropProcQuery } from './searchProcQuerry.js';
 
 const pool = mysql.createPool({
   connectionLimit: dbConfig.connectionLimit,
@@ -53,7 +54,6 @@ export function initDb() {
             }
           },
         );
-
         connection.query(
           `CREATE TABLE IF NOT EXISTS reservation (
             reservation_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,24 +72,38 @@ export function initDb() {
             }
           },
         );
-
         connection.query(
           `CREATE TABLE IF NOT EXISTS admins (
             admin_id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL
           );`,
-          (err4, resp) => {
+          (err4) => {
             if (err4) {
               console.error(err4);
               reject(err4);
             } else {
-              console.log('Adminok tábla rendben!\n');
-              resolve(resp);
+              console.log('Adminok tábla rendben!');
             }
           },
         );
-
+        connection.query(dropProcQuery, (err5) => {
+          if (err5) {
+            console.error(err5);
+            reject(err5);
+          } else {
+            console.log('Tárolt eljárás kitörölve!');
+          }
+        });
+        connection.query(createProcQuery, (err5, resp) => {
+          if (err5) {
+            console.error(err5);
+            reject(err5);
+          } else {
+            console.log('Tárolt eljárás rendben!\n');
+            resolve(resp);
+          }
+        });
         connection.release();
       }
     });
@@ -154,6 +168,11 @@ export function insertReservation(params) {
   return executeQuery(query, params);
 }
 
+export function getReservationOwner(id) {
+  const query = 'SELECT username FROM reservation WHERE reservation_id = ?';
+  return executeQuery(query, [id]);
+}
+
 export function insertTrain(params) {
   const query =
     'INSERT INTO journey (origin, destination, day, departure_time, arrival_time, price, type) values (?, ?, ?, ?, ?, ?, ?)';
@@ -172,7 +191,7 @@ export function getAllUsers() {
 
 export function searchTrain(params) {
   const query = `
-  Call FindTrainOptions(?, ?, ?, ?);
+  Call FindTrainOptions(?, ?, ?, ?, ?);
   `;
   return executeQuery(query, params);
 }

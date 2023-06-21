@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getReservationOwner } from '../db/db.js';
 
 export const secretKey = 'web-projekt-secret-key';
 export function authenticateToken(req, res, next) {
@@ -49,5 +50,25 @@ export function getUsername(req) {
     return decoded.username;
   } catch (err) {
     return null;
+  }
+}
+
+export async function checkOwner(req, res, next) {
+  const { reservationId } = req.params;
+
+  try {
+    const response = await getReservationOwner(reservationId);
+    const owner = response[0].username;
+
+    const username = await getUsername(req);
+
+    if (username !== owner) {
+      res.status(401).render('error.ejs', { message: 'You are not allowed to delete this reservation', problem: '' });
+      return;
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).render('error.ejs', { message: 'Server Error while checking reservation owner', problem: error });
   }
 }

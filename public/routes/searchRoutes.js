@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllJourneys, getJourneyDetailsById, searchTrain } from '../db/db.js';
-import { isLoggedIn, getUsername } from '../middleware/authToken.js';
+import { isLoggedIn, getUsername } from '../middleware/authMiddleware.js';
 import { validateSearchData, getInvalidMessage } from '../validation/validator.js';
 
 const router = express.Router();
@@ -21,8 +21,9 @@ router.get('/', (req, res) => {
 
 router.get('/search_train', (req, res) => {
   let { from, to, minprice, maxprice } = req.query;
+  const { type } = req.query;
 
-  if (validateSearchData(from, to, minprice, maxprice) === false) {
+  if (validateSearchData(from, to, minprice, maxprice, type) === false) {
     res.render('error.ejs', { message: 'Bad request! (incorrect input values)', problem: `${getInvalidMessage()}` });
     return;
   }
@@ -30,10 +31,10 @@ router.get('/search_train', (req, res) => {
   from = `%${from.toLowerCase()}%`;
   to = `%${to.toLowerCase()}%`;
 
-  minprice = minprice === '' ? 0 : parseInt(minprice, 10);
-  maxprice = maxprice === '' ? 2147483647 : parseInt(maxprice, 10);
+  minprice = minprice === '' || typeof minprice === 'undefined' ? 0 : parseInt(minprice, 10);
+  maxprice = maxprice === '' || typeof maxprice === 'undefined' ? 2147483647 : parseInt(maxprice, 10);
 
-  const searchTrainParams = [from, to, minprice, maxprice];
+  const searchTrainParams = [from, to, minprice, maxprice, type];
 
   searchTrain(searchTrainParams)
     .then((result) => {

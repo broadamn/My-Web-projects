@@ -1,15 +1,16 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { validateLoginData, validateRegistrationData } from '../middleware/credintalValidator.js';
 import { insertUser, checkIfUserExists, getUserPassword, getAdminPassword } from '../db/db.js';
-import { secretKey } from '../middleware/authToken.js';
+import { secretKey } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 router.get('/loginpage', (req, res) => {
   res.render('login.ejs');
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', validateLoginData, async (req, res) => {
   const { username, password, role } = req.body;
 
   try {
@@ -34,7 +35,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ username, role }, secretKey, { expiresIn: '1h' });
 
-    res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 });
+    res.cookie('jwt', token, { httpOnly: true, maxAge: 360000 });
 
     res.redirect('/');
   } catch (error) {
@@ -44,7 +45,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', validateRegistrationData, (req, res) => {
   const { username } = req.body;
   const { password1 } = req.body;
   const { password2 } = req.body;

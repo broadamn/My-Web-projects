@@ -30,7 +30,7 @@
 
             <div class="input_div">
             <input type="password" id="password" name="password" placeholder="Jelszó" required><br>
-            <img src="../pictures/eye-close.png" alt="eye" id="eyeicon">
+            <img src="../pictures/eye-close.png" alt="eye" id="eyeicon1">
             </div>
 
             <input type="radio" id="user" name="role" value="user" checked>
@@ -49,14 +49,19 @@
     <div id="register-form" class="register-form">
         <h1>Regisztráció</h1>
         <form action="/register" method="POST">
-            <label for="username">Felhasználónév:</label>
-            <input type="text" id="username2" name="username" required><br><br>
+            <div class="input_div">
+                <input type="text" id="username1" name="username" placeholder="Felhasználónév" required><br>
+            </div>
 
-            <label for="password">Jelszó:</label>
-            <input type="password" id="password1" name="password1" required><br><br>
+            <div class="input_div">
+                <input type="password" id="password1" name="password1" placeholder="Jelszó" required><br>
+                <img src="../pictures/eye-close.png" alt="eye" id="eyeicon2">
+            </div>
 
-            <label for="password">Jelszó újra:</label>
-            <input type="password" id="password2" name="password2" required><br>
+            <div class="input_div">
+                <input type="password" id="password2" name="password2" placeholder="Jelszó újra" required><br>
+                <img src="../pictures/eye-close.png" alt="eye" id="eyeicon3">
+            </div>
 
             <p>Van már fiókod? <a href="#" onclick="showLoginForm()" class="switchlink">Jelentkezz be itt</a></p>
 
@@ -68,7 +73,7 @@
             <%= problem %>
         </p>
         <% } %>
-
+        
         <script src="../static/loginscript.js"></script>
 </body>
 

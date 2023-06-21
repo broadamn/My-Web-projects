@@ -1,6 +1,6 @@
 import express from 'express';
 import { insertTrain, deleteJourneybyId } from '../db/db.js';
-import { authenticateToken } from '../middleware/authToken.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
 import { validateTrain, getInvalidMessage } from '../validation/validator.js';
 
 const router = express.Router();
