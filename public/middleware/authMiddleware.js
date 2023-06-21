@@ -55,16 +55,18 @@ export function getUsername(req) {
 
 export async function checkOwner(req, res, next) {
   const { reservationId } = req.params;
-
+  const role = isLoggedIn(req);
   try {
-    const response = await getReservationOwner(reservationId);
-    const owner = response[0].username;
+    if (role !== 'admin') {
+      const response = await getReservationOwner(reservationId);
+      const owner = response[0].username;
 
-    const username = await getUsername(req);
+      const username = await getUsername(req);
 
-    if (username !== owner) {
-      res.status(401).render('error.ejs', { message: 'You are not allowed to delete this reservation', problem: '' });
-      return;
+      if (username !== owner) {
+        res.status(401).render('error.ejs', { message: 'You are not allowed to delete this reservation', problem: '' });
+        return;
+      }
     }
 
     next();

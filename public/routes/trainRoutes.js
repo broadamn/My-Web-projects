@@ -32,20 +32,20 @@ router.post('/add_train', authenticateToken, (req, res) => {
   insertTrain(insertTrainParams)
     .then(() => {
       console.log(
-        `Train added: ${train.from} - ${train.to} ${train.day} ${train.dtime} ${train.atime} ${train.price} ${train.type}`,
+        `Vonat hozzáadva: ${train.from} - ${train.to} ${train.day} ${train.dtime} ${train.atime} ${train.price} ${train.type}`,
       );
       res.redirect('/');
     })
     .catch((errmsg) => {
       console.error(errmsg);
-      res.render('error.ejs', { message: 'Error adding train!', problem: `${errmsg}` });
+      res.render('error.ejs', { message: 'Hiba a vonat hozzáadása során!', problem: `${errmsg}` });
     });
 });
 
 router.delete('/delete_journey/:journeyId', authenticateToken, (req, res) => {
   if (req.user.role !== 'admin') {
     res.status(401);
-    res.render('login.ejs', { problem: 'Admin privileges required for this action!' });
+    res.render('login.ejs', { problem: 'Admin jogok szükségesek ehhez a művelethez!' });
     return;
   }
 
